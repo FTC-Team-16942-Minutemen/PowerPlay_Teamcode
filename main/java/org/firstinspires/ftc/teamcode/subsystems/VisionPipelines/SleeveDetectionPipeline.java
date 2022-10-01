@@ -60,6 +60,8 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
     int imageSizeY = 480;
     int maxAreaIndex = 0;
 
+    int m_parkingSpot = 0;
+
 //    public static int H_start = 50;
 //    public static int H_end = 80;
 
@@ -155,10 +157,8 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
 //               new Point(40,70), Imgproc.FONT_HERSHEY_SIMPLEX,
 //               2, new Scalar(255));
 
-
-
-
-
+        //park in the spot that has the biggest index
+        m_parkingSpot = maxAreaIndex;
 
         switch(m_stageToShow) {
             case 1:
@@ -181,4 +181,6 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
     {
         return m_stageToShow;
     }
+
+    public int getParkingSpot() {return m_parkingSpot;}
 }

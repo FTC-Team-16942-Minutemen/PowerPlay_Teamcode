@@ -185,17 +185,18 @@ public class TrajectorySequenceRunner {
         }
 
 
-//        packet.put("x", poseEstimate.getX());
-//        packet.put("y", poseEstimate.getY());
-//        packet.put("heading (deg)", Math.toDegrees(poseEstimate.getHeading()));
-//
-//        packet.put("xError", getLastPoseError().getX());
-//        packet.put("yError", getLastPoseError().getY());
-//        packet.put("headingError (deg)", Math.toDegrees(getLastPoseError().getHeading()));
-//
-//        draw(fieldOverlay, currentTrajectorySequence, currentSegment, targetPose, poseEstimate);
+        //Comment this out if you don't want to obscure the telemetry (all the way down to the dashboard)
+        packet.put("x", poseEstimate.getX());
+        packet.put("y", poseEstimate.getY());
+        packet.put("heading (deg)", Math.toDegrees(poseEstimate.getHeading()));
 
-//        dashboard.sendTelemetryPacket(packet);
+        packet.put("xError", getLastPoseError().getX());
+        packet.put("yError", getLastPoseError().getY());
+        packet.put("headingError (deg)", Math.toDegrees(getLastPoseError().getHeading()));
+
+        draw(fieldOverlay, currentTrajectorySequence, currentSegment, targetPose, poseEstimate);
+
+        dashboard.sendTelemetryPacket(packet);
 
         return driveSignal;
     }

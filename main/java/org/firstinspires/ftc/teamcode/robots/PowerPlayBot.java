@@ -33,7 +33,7 @@ public class PowerPlayBot extends Robot {
     GamepadEx m_gamePad1;
 
     //Subsystems
-    //DriveSubsystem m_driveTrain;
+    DriveSubsystem m_driveTrain;
     //LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
     //CascadingLinearSlide m_CascadingLinearSlide;
@@ -56,7 +56,7 @@ public class PowerPlayBot extends Robot {
         m_telemetry = new MultipleTelemetry(m_telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //Initialize Subsystems
-//        m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry);
+        m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry);
 //        m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
 //        m_CascadingLinearSlide = new CascadingLinearSlide(m_hardwareMap, m_telemetry);
@@ -126,15 +126,15 @@ public class PowerPlayBot extends Robot {
 
     private void setupAuton()
     {//        m_command.schedule();
-//        CommandScheduler.getInstance().schedule(
-//                new SequentialCommandGroup(
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
 //                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath"),
 //                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath2"),
 //                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath3"),
 //                        new TrajectoryFollowerCommand(m_driveTrain, "Testing Brother John"),
 //                        new TrajectoryFollowerCommand(m_driveTrain,"PoleRun"),
-//                        new TurnCommand(m_driveTrain, 3.1415926)
-//                ));
+                        new TurnCommand(m_driveTrain, 3.1415926/2)
+                ));
     }
 
 }
