@@ -92,11 +92,11 @@ public class PowerPlayBot extends Robot {
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
 //                .whenHeld(new InstantCommand(() -> {m_DistanceSensorSubsystem.getDistance();}));
 //
-//        m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
-//                ()->m_gamePad1.getLeftY(),
-//                ()->-m_gamePad1.getLeftX(),
-//                ()->-m_gamePad1.getRightX(),
-//                true));
+        m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
+                ()->m_gamePad1.getLeftY(),
+                ()->-m_gamePad1.getLeftX(),
+                ()->-m_gamePad1.getRightX(),
+                true));
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 //                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
 //
