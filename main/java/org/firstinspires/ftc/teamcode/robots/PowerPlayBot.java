@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.robots;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -92,6 +94,7 @@ public class PowerPlayBot extends Robot {
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
 //                .whenHeld(new InstantCommand(() -> {m_DistanceSensorSubsystem.getDistance();}));
 //
+        //m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( -63.0, -17.0), 0.0));
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
                 ()->-m_gamePad1.getLeftX(),
@@ -126,14 +129,27 @@ public class PowerPlayBot extends Robot {
 
     private void setupAuton()
     {//        m_command.schedule();
+        m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-//                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath2"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "TestPath3"),
+                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue2"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue3"),
+                        new TurnCommand(m_driveTrain, -3.1415926/2.0),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue4"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6")
 //                        new TrajectoryFollowerCommand(m_driveTrain, "Testing Brother John"),
 //                        new TrajectoryFollowerCommand(m_driveTrain,"PoleRun"),
-                        new TurnCommand(m_driveTrain, 3.1415926/2)
+//                        new TurnCommand(m_driveTrain, 3.1415926/2)
                 ));
     }
 

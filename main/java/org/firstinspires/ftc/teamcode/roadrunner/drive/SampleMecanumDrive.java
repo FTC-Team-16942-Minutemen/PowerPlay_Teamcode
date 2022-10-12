@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -59,9 +60,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public static double LATERAL_MULTIPLIER = 1;
 
-    public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
+    public static double VX_WEIGHT = 0.4;
+    public static double VY_WEIGHT = 0.4;
+    public static double OMEGA_WEIGHT = 0.4;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
@@ -96,10 +97,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        //imu = hardwareMap.get(BNO055IMU.class, "imu");
-        //BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        //parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        //imu.initialize(parameters);
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -134,7 +135,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(0.85);
+            motorConfigurationType.setAchieveableMaxRPMFraction(0.60);
             motorConfigurationType.setMaxRPM(DriveConstants.MAX_RPM);
             motorConfigurationType.setTicksPerRev(DriveConstants.TICKS_PER_REV / DriveConstants.GEAR_RATIO);
             motor.setMotorType(motorConfigurationType);
@@ -160,8 +161,8 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        //setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -268,19 +269,19 @@ public class SampleMecanumDrive extends MecanumDrive {
                 VY_WEIGHT*drivePower.getY(),
                 OMEGA_WEIGHT*drivePower.getHeading());
 
-//        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
-//                + Math.abs(drivePower.getHeading()) > 1) {
-//            // re-normalize the powers according to the weights
-//            double denom = VX_WEIGHT * Math.abs(drivePower.getX())
-//                    + VY_WEIGHT * Math.abs(drivePower.getY())
-//                    + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
-//
-//            vel = new Pose2d(
-//                    VX_WEIGHT * drivePower.getX(),
-//                    VY_WEIGHT * drivePower.getY(),
-//                    OMEGA_WEIGHT * drivePower.getHeading()
-//            ).div(denom);
-//        }
+        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
+                + Math.abs(drivePower.getHeading()) > 1) {
+            // re-normalize the powers according to the weights
+            double denom = VX_WEIGHT * Math.abs(drivePower.getX())
+                    + VY_WEIGHT * Math.abs(drivePower.getY())
+                    + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
+
+            vel = new Pose2d(
+                    VX_WEIGHT * drivePower.getX(),
+                    VY_WEIGHT * drivePower.getY(),
+                    OMEGA_WEIGHT * drivePower.getHeading()
+            ).div(denom);
+        }
 
         setDrivePower(vel);
     }
@@ -319,7 +320,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return 0;
+        return imu.getAngularOrientation().firstAngle;
     }
 
     @Override
@@ -329,7 +330,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         // expected). This bug does NOT affect orientation. 
         //
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
-        return null;
+        return (double) imu.getAngularVelocity().zRotationRate;
+        //comment htis out for 3 wheel
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

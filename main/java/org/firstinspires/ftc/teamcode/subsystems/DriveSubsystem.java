@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.util.Encoder;
 import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * A subsystem that uses the {@link SampleMecanumDrive} class.
@@ -31,12 +32,16 @@ public class DriveSubsystem extends SubsystemBase {
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
     SampleMecanumDrive m_drive;
-
+    int[] junctionX = {-48,-24,0, 24, 48};
+    int[] junctionY = {-48,-24,0, 24,48};
+    double REPULSERADIUS = 11.0;
+    double PF_SCALE = 1.0;
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry)
     {
         m_hardwareMap=hardwareMap;
         m_telemetry=telemetry;
         m_drive=new SampleMecanumDrive(m_hardwareMap, m_telemetry);
+
     }
 
 
@@ -44,17 +49,40 @@ public class DriveSubsystem extends SubsystemBase {
     public void drive(double leftX, double leftY, double rightX, boolean isFieldCentric)
     {
         Pose2d poseEstimate = getPoseEstimate();
-        Vector2d input= new Vector2d(leftY, leftX).rotated(
+        Vector2d input_vec = new Vector2d(leftY, leftX).rotated(
                 isFieldCentric ? -poseEstimate.getHeading() :0
         );
+        //Vector2d CorrectedInput = potentialFields(input_vec);
 
         m_drive.setWeightedDrivePower(
                 new Pose2d(
-                        input.getX(),
-                        input.getY(),
+                        input_vec.getX(),
+                        input_vec.getY(),
                         rightX
                 )
         );
+    }
+    private Vector2d potentialFields(Vector2d input_vec) {
+        Vector2d updated_input = input_vec;
+        Pose2d poseEstimate = getPoseEstimate();
+
+        for (int ix = 0; ix < junctionX.length; ix++) {
+            for (int iy = 0; iy < junctionY.length; iy++) {
+                Vector2d r_vec = new Vector2d(poseEstimate.getX(), poseEstimate.getY());
+                Vector2d j_vec = new Vector2d(junctionX[ix], junctionY[iy]);
+                Vector2d repulse_vec = r_vec.minus(j_vec);
+
+                double dist = repulse_vec.norm();
+
+                if (dist < REPULSERADIUS) {
+                    Vector2d unit_repulse_vec = repulse_vec.div(dist);
+                    Vector2d new_vector = unit_repulse_vec.times(input_vec.norm() * PF_SCALE);
+                    updated_input = input_vec.plus(new_vector);
+                }
+            }
+        }
+            return updated_input;
+
     }
 
     public void update()
