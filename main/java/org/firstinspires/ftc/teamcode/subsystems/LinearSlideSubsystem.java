@@ -37,7 +37,11 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     public static double position_p = 8.0;
 
+    public static int maxlevel = 600;
+
     private int position_index = 0;
+    int[] positions = {0, 300, 1300, 2034, 3150};
+    //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
     public LinearSlideSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         m_hardwareMap=hardwareMap;
@@ -47,16 +51,20 @@ public class LinearSlideSubsystem extends SubsystemBase {
         m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m_LinearSlideMotor.setTargetPosition(0);
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void step(int direction) {
         position_index = position_index + direction;
-        if (position_index >= 3) {
-            position_index = 3;
+        if (position_index >= positions.length) {
+            position_index = positions.length - 1;
         }
         if (position_index < 0) {
             position_index = 0;
         }
+    }
+    public void extend(double input) {
+        m_LinearSlideMotor.setPower(input);
     }
     public void stop() {
 
@@ -64,7 +72,8 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        desiredPosition = positionSetpoint * position_index;
+//        positions[positions.length - 1] = maxlevel;
+        desiredPosition = positions[position_index];
        // m_telemetry.addData("TruePosition", m_LinearSlideMotor.getCurrentPosition());
         //m_telemetry.addData("DesiredPosition", desiredPosition);
         //m_telemetry.update();

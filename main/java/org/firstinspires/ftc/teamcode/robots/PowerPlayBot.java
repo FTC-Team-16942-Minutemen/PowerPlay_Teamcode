@@ -36,7 +36,7 @@ public class PowerPlayBot extends Robot {
 
     //Subsystems
     DriveSubsystem m_driveTrain;
-    //LinearSlideSubsystem m_linearSlideSubsystem;
+    LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
     //CascadingLinearSlide m_CascadingLinearSlide;
     //DistanceSensorSubsystem m_DistanceSensorSubsystem;
@@ -59,7 +59,7 @@ public class PowerPlayBot extends Robot {
 
         //Initialize Subsystems
         m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry);
-//        m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
+        m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
 //        m_CascadingLinearSlide = new CascadingLinearSlide(m_hardwareMap, m_telemetry);
 //        m_DistanceSensorSubsystem = new DistanceSensorSubsystem(m_hardwareMap, m_telemetry);
@@ -100,12 +100,18 @@ public class PowerPlayBot extends Robot {
                 ()->-m_gamePad1.getLeftX(),
                 ()->-m_gamePad1.getRightX(),
                 true));
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-//                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
+//                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.extend(1);}))
+//                .whenReleased(new InstantCommand(()->{m_linearSlideSubsystem.extend(0);}));
 //
 //
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-//                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
+//                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.extend(-1);}))
+//                .whenReleased(new InstantCommand(()->{m_linearSlideSubsystem.extend(0);}));
 //
 //
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
