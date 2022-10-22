@@ -48,11 +48,14 @@ public class TeleOp_OpMode extends LinearOpMode {
     public void runOpMode() {
 
         //Instantiate the robot
-        Robot m_robot = new PowerPlayBot(
+        PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.TELEOP,
                 hardwareMap,
                 telemetry,
                 gamepad1);
+
+        //Load the stored Pose from the static
+        m_robot.setRobotPose(PoseStorage.currentPose);
 
         //Wait for driver to press PLAY and then STOP
         waitForStart();

@@ -73,6 +73,16 @@ public class PowerPlayBot extends Robot {
         setupOpMode(type);
     }
 
+    public Pose2d getRobotPose()
+    {
+        return m_driveTrain.getPoseEstimate();
+    }
+
+    public void setRobotPose(Pose2d inputPose)
+    {
+        m_driveTrain.setPoseEstimate(inputPose);
+    }
+
     private void setupOpMode(Constants.OpModeType type)
     {
         if(type == Constants.OpModeType.TELEOP)
@@ -140,7 +150,6 @@ public class PowerPlayBot extends Robot {
 
     private void setupAuton()
     {//        m_command.schedule();
-        m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
 //        CommandScheduler.getInstance().schedule(
 //                new SequentialCommandGroup(
 //                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),

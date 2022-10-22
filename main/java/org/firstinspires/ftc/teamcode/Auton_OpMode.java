@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -49,11 +51,14 @@ public class Auton_OpMode extends LinearOpMode {
     public void runOpMode() {
 
         //Instantiate the robot
-        Robot m_robot = new PowerPlayBot(
+        PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.AUTO,
                 hardwareMap,
                 telemetry,
                 gamepad1);
+
+        //Initialize the robot's Pose
+        m_robot.setRobotPose(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
 
         //Wait for driver to press PLAY
         waitForStart();
@@ -63,6 +68,9 @@ public class Auton_OpMode extends LinearOpMode {
         {
             m_robot.run();
         }
+
+        //Store the last post of the robot to a static
+        PoseStorage.currentPose = m_robot.getRobotPose();
         m_robot.reset();
     }
 }
