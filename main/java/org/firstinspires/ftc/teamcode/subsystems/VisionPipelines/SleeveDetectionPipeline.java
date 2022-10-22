@@ -49,6 +49,7 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
     Mat input_withContours = new Mat();
     Mat input_withSides = new Mat();
     Mat input_withPoints = new Mat();
+    Mat erodedMaskForDisplay = new Mat();
     //Mat input_withPollyApprox = new Mat();
     int maxContourIdx = 0;
     double maxArea = 0.0;
@@ -65,9 +66,21 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
 //    public static int H_start = 50;
 //    public static int H_end = 80;
 
-    public static int[] HstartArray = {50, 100, 160};
-    public static int[] HendArray = {80, 110, 172};
+
+    //green {50 to 80}
+    //cyan  {100 to 110}
+    //magenta {160 to 172}
+    public static int greenStart = 70;
+    public static int greenEnd = 90;
+    public static int cyanStart = 100;
+    public static int cyanEnd = 110;
+    public static int magentaStart = 160;
+    public static int magentaEnd = 172;
+    public int[] HstartArray = {magentaStart, greenStart, cyanStart};
+    public int[] HendArray = {magentaEnd, greenEnd, cyanEnd};
     double[] ContourArea = new double[3];
+
+    public static int erodedMaskLevel = 0;
 
     MatOfPoint poly = new MatOfPoint();
     MatOfPoint2f poly2f = new MatOfPoint2f();
@@ -75,7 +88,6 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
     MatOfPoint dst = new MatOfPoint();
 
     Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5,5), new Point(-1,-1));
-
 
     @Override
     public Mat processFrame(Mat input)
@@ -91,6 +103,14 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, input_bgr,Imgproc.COLOR_RGBA2BGR); //EasyOpenCV return images in RGBA format
         Imgproc.cvtColor(input_bgr, input_hsv, Imgproc.COLOR_BGR2HSV); // We convert them to BGR since only BGR (or RGB) conversions to HSV exist
 
+        HstartArray[0] = magentaStart;
+        HstartArray[1] = greenStart;
+        HstartArray[2] = cyanStart;
+
+        HendArray[0] = magentaEnd;
+        HendArray[1] = greenEnd;
+        HendArray[2] = cyanEnd;
+
         for(int n = 0; n < 3; n++) {
             Core.inRange(input_hsv,
 //                    new Scalar(H_start, 50, 50),
@@ -105,6 +125,11 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
             //Draw contours around detected pixels
             contours.clear();
             Imgproc.findContours(erodedMask, contours, m_hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE );
+
+            if(erodedMaskLevel == n)
+            {
+                erodedMask.copyTo(erodedMaskForDisplay);
+            }
 
             ContourArea[n] = 0.0;
             maxContourIdx = 0;
@@ -131,6 +156,10 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
         }
 
         input.copyTo(input_withContours);
+        Imgproc.putText(input_withContours,
+                "Spot:" + Integer.toString(maxAreaIndex),
+                new Point(50,150), Imgproc.FONT_HERSHEY_SIMPLEX, 3, new Scalar(255),3);
+
 //        if (contours.size() != 0 )
 //        {
 //            poly = contours.get(maxContourIdx);
@@ -148,10 +177,7 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
 
 
 //        input_withContours.copyTo(input_withSides);
-        Imgproc.putText(input_withContours,
-                "Spot:" + Integer.toString(maxAreaIndex),
-                new Point(50,150), Imgproc.FONT_HERSHEY_SIMPLEX, 3, new Scalar(255),3);
-        
+
 //       Imgproc.putText(input_withContours,
 //               "#pts: " + dst.toArray().length,
 //               new Point(40,70), Imgproc.FONT_HERSHEY_SIMPLEX,
@@ -164,11 +190,9 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
             case 1:
                 return mask;
             case 2:
-                return erodedMask;
+                return erodedMaskForDisplay;
             case 3:
                 return input_withContours;
-            case 4:
-                return input_withSides;
             default:
                 return input;
         }

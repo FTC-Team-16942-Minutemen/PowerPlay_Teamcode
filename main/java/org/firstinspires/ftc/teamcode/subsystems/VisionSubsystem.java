@@ -56,6 +56,11 @@ public class VisionSubsystem extends SubsystemBase {
 //        m_telemetry.update();
     }
 
+    public void disablePipeline()
+    {
+        m_webcam.stopStreaming();
+    }
+
     public int getParkingSpot(){
         return m_imagePipeline.getParkingSpot();
     }

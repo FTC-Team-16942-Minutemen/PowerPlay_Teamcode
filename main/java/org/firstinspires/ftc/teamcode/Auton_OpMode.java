@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Robot;
+import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -57,15 +58,23 @@ public class Auton_OpMode extends LinearOpMode {
                 telemetry,
                 gamepad1);
 
+        getRuntime();
         //Initialize the robot's Pose
         m_robot.setRobotPose(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
 
         //Wait for driver to press PLAY
         waitForStart();
 
+        //reset the runtime timer
+        resetRuntime();
+
+        //Disable the parking detection pipeline and start the parking timer countdown
+        m_robot.disableVision();
+
         // Run the robot until the end of the match (or until the driver presses STOP)
         while (opModeIsActive() && !isStopRequested())
         {
+            m_robot.setCurrentTime(getRuntime());
             m_robot.run();
         }
 

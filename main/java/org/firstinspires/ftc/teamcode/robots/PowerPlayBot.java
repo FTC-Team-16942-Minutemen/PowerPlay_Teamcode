@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.DistanceTrigger;
+import org.firstinspires.ftc.teamcode.robots.triggers.TimedTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -44,6 +46,8 @@ public class PowerPlayBot extends Robot {
 
     Command m_command;
     DistanceTrigger m_distanceTrigger;
+    TimedTrigger m_timedParkingTrigger;
+    Timing.Timer m_timer;
 
     public PowerPlayBot(Constants.OpModeType type,
                      HardwareMap hardwareMap,
@@ -69,8 +73,20 @@ public class PowerPlayBot extends Robot {
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
 //        m_command = new TrajectoryFollowerCommand(m_driveTrain, "TestPath");//was TestPath
 //        m_distanceTrigger = new DistanceTrigger(m_DistanceSensorSubsystem, 8);
+        m_timer = new Timing.Timer(29);
+        m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
 
         setupOpMode(type);
+    }
+
+    public void disableVision()
+    {
+        m_visionSubsystem.disablePipeline();
+    }
+
+    public void setCurrentTime(double time)
+    {
+        m_timedParkingTrigger.setTime(time);
     }
 
     public Pose2d getRobotPose()
@@ -149,7 +165,10 @@ public class PowerPlayBot extends Robot {
 
 
     private void setupAuton()
-    {//        m_command.schedule();
+    {
+        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
+//        .whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
+        //        m_command.schedule();
 //        CommandScheduler.getInstance().schedule(
 //                new SequentialCommandGroup(
 //                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),
