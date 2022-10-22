@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -65,6 +67,9 @@ public class TeleOp_OpMode extends LinearOpMode {
         {
             m_robot.run();
         }
+
+        //Reset the PoseStorage in case we have to start over
+        PoseStorage.currentPose = new Pose2d(new Vector2d( 0.0, 0.0), 0.0);
         m_robot.reset();
     }
 }
