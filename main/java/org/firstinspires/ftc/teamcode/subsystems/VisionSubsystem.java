@@ -52,12 +52,12 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_telemetry.addData("stageToShow:", m_imagePipeline.getStageToShow());
-        m_telemetry.update();
+//        m_telemetry.addData("stageToShow:", m_imagePipeline.getStageToShow());
+//        m_telemetry.update();
     }
 
-    public double getAngle(){
-        return 0.0;
+    public int getParkingSpot(){
+        return m_imagePipeline.getParkingSpot();
     }
 
 }

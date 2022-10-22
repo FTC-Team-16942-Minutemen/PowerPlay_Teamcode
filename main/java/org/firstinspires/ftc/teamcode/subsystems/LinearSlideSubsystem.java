@@ -36,11 +36,18 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static double f = 14.0;
 
     public static double position_p = 8.0;
+    public static double downElevatorPower = 0.6;
+    public static double upElevatorPower = 1.0;
 
-    public static int maxlevel = 600;
+    public static int junctionHigh = 3150;
+    public static int junctionMed = 2034;
+    public static int junctionLow = 1300;
+    public static int junctionGnd = 300;
+    public static int lowestPoint = 0;
 
     private int position_index = 0;
-    int[] positions = {0, 300, 1300, 2034, 3150};
+    private int error = 0;
+    int[] positions = {lowestPoint, junctionGnd, junctionLow, junctionMed, junctionHigh};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
     public LinearSlideSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -50,6 +57,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
         m_LinearSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m_LinearSlideMotor.setTargetPosition(0);
+
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -72,7 +80,11 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        positions[positions.length - 1] = maxlevel;
+        positions[0] = lowestPoint;
+        positions[1] = junctionGnd;
+        positions[2] = junctionLow;
+        positions[3] = junctionMed;
+        positions[4] = junctionHigh;
         desiredPosition = positions[position_index];
        // m_telemetry.addData("TruePosition", m_LinearSlideMotor.getCurrentPosition());
         //m_telemetry.addData("DesiredPosition", desiredPosition);
@@ -82,7 +94,16 @@ public class LinearSlideSubsystem extends SubsystemBase {
 //
         m_LinearSlideMotor.setTargetPosition(desiredPosition);
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        m_LinearSlideMotor.setPower(1.0);
+        error = desiredPosition - m_LinearSlideMotor.getCurrentPosition();
+
+        if(error >= 0)
+        {
+            m_LinearSlideMotor.setPower(upElevatorPower);
+        }
+        else
+        {
+            m_LinearSlideMotor.setPower(downElevatorPower);
+        }
     }
 
 

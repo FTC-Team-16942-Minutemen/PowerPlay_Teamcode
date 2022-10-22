@@ -50,13 +50,13 @@ public class AutoTargetingDriveCommand extends CommandBase {
 
         double targetAngle = 0.0;
         m_pidController.setTargetPosition(targetAngle);
-        double headingControl = m_pidController.update(m_visionSubsystem.getAngle()*Math.PI/180.0);
+//        double headingControl = m_pidController.update(m_visionSubsystem.getAngle()*Math.PI/180.0);
 
-        m_driveSubsystem.drive(m_leftXSupplier.getAsDouble(),
-        m_leftYSupplier.getAsDouble(),
-            headingControl,
-            m_isFieldCentric);
-        m_driveSubsystem.update();
+//        m_driveSubsystem.drive(m_leftXSupplier.getAsDouble(),
+//        m_leftYSupplier.getAsDouble(),
+//            headingControl,
+//            m_isFieldCentric);
+//        m_driveSubsystem.update();
 
     }
 

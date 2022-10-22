@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.DistanceTrigger;
-import org.firstinspires.ftc.teamcode.subsystems.CascadingLinearSlide;
+import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
@@ -38,6 +38,7 @@ public class PowerPlayBot extends Robot {
     DriveSubsystem m_driveTrain;
     LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
+    ClawIntakeSubsystem m_clawIntakeSubsystem;
     //CascadingLinearSlide m_CascadingLinearSlide;
     //DistanceSensorSubsystem m_DistanceSensorSubsystem;
 
@@ -61,6 +62,7 @@ public class PowerPlayBot extends Robot {
         m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry);
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
+        m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
 //        m_CascadingLinearSlide = new CascadingLinearSlide(m_hardwareMap, m_telemetry);
 //        m_DistanceSensorSubsystem = new DistanceSensorSubsystem(m_hardwareMap, m_telemetry);
 
@@ -100,10 +102,13 @@ public class PowerPlayBot extends Robot {
                 ()->-m_gamePad1.getLeftX(),
                 ()->-m_gamePad1.getRightX(),
                 true));
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
+
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 //                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.extend(1);}))
 //                .whenReleased(new InstantCommand(()->{m_linearSlideSubsystem.extend(0);}));
@@ -136,27 +141,24 @@ public class PowerPlayBot extends Robot {
     private void setupAuton()
     {//        m_command.schedule();
         m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
-        CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup(
-                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue2"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue3"),
-                        new TurnCommand(m_driveTrain, -3.1415926/2.0),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue4"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6")
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Testing Brother John"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"PoleRun"),
-//                        new TurnCommand(m_driveTrain, 3.1415926/2)
-                ));
+//        CommandScheduler.getInstance().schedule(
+//                new SequentialCommandGroup(
+//                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue2"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue3"),
+//                        new TurnCommand(m_driveTrain, -3.1415926/2.0),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue4"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6")
+//                ));
     }
 
 }
