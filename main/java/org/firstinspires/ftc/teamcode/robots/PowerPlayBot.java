@@ -45,14 +45,15 @@ public class PowerPlayBot extends Robot {
     //DistanceSensorSubsystem m_DistanceSensorSubsystem;
 
     Command m_command;
-    DistanceTrigger m_distanceTrigger;
-    TimedTrigger m_timedParkingTrigger;
-    Timing.Timer m_timer;
+//    DistanceTrigger m_distanceTrigger;
+//    TimedTrigger m_timedParkingTrigger;
+//    Timing.Timer m_timer;
 
     public PowerPlayBot(Constants.OpModeType type,
                      HardwareMap hardwareMap,
                      Telemetry telemetry,
-                     Gamepad gamePad1)
+                     Gamepad gamePad1,
+                        Pose2d initialPose)
     {
         //Initialize basic hardware structures
         m_hardwareMap = hardwareMap;
@@ -63,7 +64,7 @@ public class PowerPlayBot extends Robot {
         m_telemetry = new MultipleTelemetry(m_telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //Initialize Subsystems
-        m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry);
+        m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry, initialPose);
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
@@ -73,8 +74,8 @@ public class PowerPlayBot extends Robot {
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
 //        m_command = new TrajectoryFollowerCommand(m_driveTrain, "TestPath");//was TestPath
 //        m_distanceTrigger = new DistanceTrigger(m_DistanceSensorSubsystem, 8);
-        m_timer = new Timing.Timer(29);
-        m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
+        //m_timer = new Timing.Timer(29);
+        //m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
 
         setupOpMode(type);
     }
@@ -84,20 +85,20 @@ public class PowerPlayBot extends Robot {
         m_visionSubsystem.disablePipeline();
     }
 
-    public void setCurrentTime(double time)
-    {
-        m_timedParkingTrigger.setTime(time);
-    }
+//    public void setCurrentTime(double time)
+//    {
+//        m_timedParkingTrigger.setTime(time);
+//    }
 
     public Pose2d getRobotPose()
     {
         return m_driveTrain.getPoseEstimate();
     }
 
-    public void setRobotPose(Pose2d inputPose)
-    {
-        m_driveTrain.setPoseEstimate(inputPose);
-    }
+//    public void setRobotPose(Pose2d inputPose)
+//    {
+//        m_driveTrain.setPoseEstimate(inputPose);
+//    }
 
     private void setupOpMode(Constants.OpModeType type)
     {
@@ -122,11 +123,12 @@ public class PowerPlayBot extends Robot {
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
 //                .whenHeld(new InstantCommand(() -> {m_DistanceSensorSubsystem.getDistance();}));
 //
-        //m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( -63.0, -17.0), 0.0));
+//        m_driveTrain.setPoseEstimate(new Pose2d(new Vector2d( 35.0, 60.0), -3.145926/2.0));
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
                 ()->-m_gamePad1.getLeftX(),
                 ()->-m_gamePad1.getRightX(),
+                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 true));
         m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
@@ -166,27 +168,28 @@ public class PowerPlayBot extends Robot {
 
     private void setupAuton()
     {
-        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
+//        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
 //        .whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
-        //        m_command.schedule();
-//        CommandScheduler.getInstance().schedule(
-//                new SequentialCommandGroup(
-//                         new TrajectoryFollowerCommand(m_driveTrain, "Blue1"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue2"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue3"),
-//                        new TurnCommand(m_driveTrain, -3.1415926/2.0),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue4"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "Blue5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"Blue6")
-//                ));
+//                m_command.schedule();
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
+//                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft1")
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft3"),
+                        new TurnCommand(m_driveTrain, -3.1415926/2.0)
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft4"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
+//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6")
+
+                ));
     }
 
 }

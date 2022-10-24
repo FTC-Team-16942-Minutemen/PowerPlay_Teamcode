@@ -49,18 +49,22 @@ public class TeleOp_OpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        //Robot initial pose
+        Pose2d initialPose = PoseStorage.currentPose;
+
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.TELEOP,
                 hardwareMap,
                 telemetry,
-                gamepad1);
-
-        //Load the stored Pose from the static
-        m_robot.setRobotPose(PoseStorage.currentPose);
+                gamepad1,
+                initialPose);
 
         //Wait for driver to press PLAY and then STOP
         waitForStart();
+
+        //Disable the parking detection pipeline and start the parking timer countdown
+        m_robot.disableVision();
 
         // Run the robot until the end of the match (or until the driver presses STOP)
         while (opModeIsActive() && !isStopRequested())

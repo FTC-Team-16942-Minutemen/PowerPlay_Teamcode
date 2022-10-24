@@ -36,6 +36,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.MAX_ACCEL;
@@ -60,9 +62,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public static double LATERAL_MULTIPLIER = 1;
 
-    public static double VX_WEIGHT = 0.4;
-    public static double VY_WEIGHT = 0.4;
-    public static double OMEGA_WEIGHT = 0.4;
+    public static double VX_WEIGHT = 1.0;
+    public static double VY_WEIGHT = 1.0;
+    public static double OMEGA_WEIGHT = 1.0;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
@@ -264,24 +266,39 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
     }
 
+    public void setRawDrivePower(Pose2d drivePower)
+    {
+        Pose2d vel = new Pose2d(VX_WEIGHT*drivePower.getX(),
+                VY_WEIGHT*drivePower.getY(),
+                OMEGA_WEIGHT*drivePower.getHeading());
+
+
+    }
+
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = new Pose2d(VX_WEIGHT*drivePower.getX(),
                 VY_WEIGHT*drivePower.getY(),
                 OMEGA_WEIGHT*drivePower.getHeading());
 
-        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
-                + Math.abs(drivePower.getHeading()) > 1) {
-            // re-normalize the powers according to the weights
-            double denom = VX_WEIGHT * Math.abs(drivePower.getX())
-                    + VY_WEIGHT * Math.abs(drivePower.getY())
-                    + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
+//        m_telemetry.addData("velX: ", vel.getX());
+//        m_telemetry.addData("velY: ", vel.getY());
+//        m_telemetry.addData("Heading: ", vel.getHeading());
+//        m_telemetry.update();
 
-            vel = new Pose2d(
-                    VX_WEIGHT * drivePower.getX(),
-                    VY_WEIGHT * drivePower.getY(),
-                    OMEGA_WEIGHT * drivePower.getHeading()
-            ).div(denom);
-        }
+
+//        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
+//                + Math.abs(drivePower.getHeading()) > 1) {
+//            // re-normalize the powers according to the weights
+//            double denom = VX_WEIGHT * Math.abs(drivePower.getX())
+//                    + VY_WEIGHT * Math.abs(drivePower.getY())
+//                    + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
+//
+//            vel = new Pose2d(
+//                    VX_WEIGHT * drivePower.getX(),
+//                    VY_WEIGHT * drivePower.getY(),
+//                    OMEGA_WEIGHT * drivePower.getHeading()
+//            ).div(denom);
+//        }
 
         setDrivePower(vel);
     }
@@ -309,13 +326,27 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        //m_telemetry.addData("Velocity:", leftFront.getVelocity());
-        //m_telemetry.addData("Power:",v);
-        //m_telemetry.update();
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        //normalize the power to the max (if it's greater than 1.0):
+        Double[] wheelpowers = {Math.abs(v), Math.abs(v1), Math.abs(v2) ,Math.abs(v2)};
+        List<Double> wheelPowerList = new ArrayList<Double>(Arrays.asList(wheelpowers));
+        double maxVal = Collections.max(wheelPowerList);
+
+        if(maxVal < 1.0)
+        {
+            maxVal = 1.0;
+        }
+
+//        m_telemetry.addData("maxVal: ", maxVal);
+//        m_telemetry.addData("Power0:",v/maxVal);
+//        m_telemetry.addData("Power1:",v1/maxVal);
+//        m_telemetry.addData("Power2:",v2/maxVal);
+//        m_telemetry.addData("Power3:",v3/maxVal);
+//        m_telemetry.update();
+
+        leftFront.setPower(v/maxVal);
+        leftRear.setPower(v1/maxVal);
+        rightRear.setPower(v2/maxVal);
+        rightFront.setPower(v3/maxVal);
     }
 
     @Override
@@ -330,8 +361,9 @@ public class SampleMecanumDrive extends MecanumDrive {
         // expected). This bug does NOT affect orientation. 
         //
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
-        return (double) imu.getAngularVelocity().zRotationRate;
-        //comment htis out for 3 wheel
+//        return (double) imu.getAngularVelocity().zRotationRate;
+        return (double) imu.getAngularVelocity().yRotationRate;
+        //comment this out for 3 wheel
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

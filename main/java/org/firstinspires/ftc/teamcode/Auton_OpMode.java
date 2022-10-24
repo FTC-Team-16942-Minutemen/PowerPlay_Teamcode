@@ -51,22 +51,25 @@ public class Auton_OpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        //Initialize the robot's Pose
+//        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
+        Pose2d initialPose = new Pose2d(new Vector2d( 0.0, 0.0), -90.0);
+
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.AUTO,
                 hardwareMap,
                 telemetry,
-                gamepad1);
+                gamepad1,
+                initialPose);
 
         getRuntime();
-        //Initialize the robot's Pose
-        m_robot.setRobotPose(new Pose2d(new Vector2d( -41.0, 60.0), -90.0));
 
         //Wait for driver to press PLAY
         waitForStart();
 
         //reset the runtime timer
-        resetRuntime();
+//        resetRuntime();
 
         //Disable the parking detection pipeline and start the parking timer countdown
         m_robot.disableVision();
@@ -74,7 +77,7 @@ public class Auton_OpMode extends LinearOpMode {
         // Run the robot until the end of the match (or until the driver presses STOP)
         while (opModeIsActive() && !isStopRequested())
         {
-            m_robot.setCurrentTime(getRuntime());
+//            m_robot.setCurrentTime(getRuntime());
             m_robot.run();
         }
 

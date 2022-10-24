@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.ejml.dense.row.mult.VectorVectorMult_CDRM;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -34,34 +35,47 @@ public class DriveSubsystem extends SubsystemBase {
     SampleMecanumDrive m_drive;
     int[] junctionX = {-48,-24,0, 24, 48};
     int[] junctionY = {-48,-24,0, 24,48};
-    double REPULSERADIUS = 11.0;
+    double REPULSERADIUS = 9.0;
     double PF_SCALE = 1.0;
-    public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry)
+    double THROTTLEMINLEVEL = 0.4;
+
+    public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose)
     {
         m_hardwareMap=hardwareMap;
         m_telemetry=telemetry;
         m_drive=new SampleMecanumDrive(m_hardwareMap, m_telemetry);
-
+        m_drive.setPoseEstimate(initialPose);
     }
 
-
-
-    public void drive(double leftX, double leftY, double rightX, boolean isFieldCentric)
+    public void drive(double leftX, double leftY, double rightX, double throttle, boolean isFieldCentric)
     {
         Pose2d poseEstimate = getPoseEstimate();
         Vector2d input_vec = new Vector2d(leftY, leftX).rotated(
                 isFieldCentric ? -poseEstimate.getHeading() :0
         );
-        //Vector2d CorrectedInput = potentialFields(input_vec);
 
+//        Vector2d CorrectedInput = quadraticControlLaw(input_vec);
+//        Vector2d CorrectedInput = potentialFields(input_vec);
+        Vector2d CorrectedInput = input_vec;
+
+        double throttleSlope = 1 - THROTTLEMINLEVEL;
+        double throttleScale = throttleSlope * throttle + THROTTLEMINLEVEL;
         m_drive.setWeightedDrivePower(
                 new Pose2d(
-                        input_vec.getX(),
-                        input_vec.getY(),
-                        rightX
+                        CorrectedInput.getX() * throttleScale,
+                        CorrectedInput.getY() * throttleScale,
+                        rightX * throttleScale
                 )
         );
     }
+
+    private Vector2d quadraticControlLaw(Vector2d inputVec)
+    {
+        double outX = inputVec.getX() * inputVec.getX();
+        double outY = inputVec.getY() * inputVec.getY();
+        return new Vector2d(outX, outY);
+    }
+
     private Vector2d potentialFields(Vector2d input_vec) {
         Vector2d updated_input = input_vec;
         Pose2d poseEstimate = getPoseEstimate();
@@ -81,8 +95,7 @@ public class DriveSubsystem extends SubsystemBase {
                 }
             }
         }
-            return updated_input;
-
+        return updated_input;
     }
 
     public void update()
@@ -95,7 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void stop(){
-        drive(0,0,0,true);
+        drive(0,0,0, 0, true);
     }
 
     public void followTrajectory(Trajectory trajectory){

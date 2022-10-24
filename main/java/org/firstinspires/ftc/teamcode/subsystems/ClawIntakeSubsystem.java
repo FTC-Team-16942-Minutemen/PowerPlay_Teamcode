@@ -14,8 +14,8 @@ public class ClawIntakeSubsystem extends SubsystemBase {
     Servo m_clawServo;
     double m_position;
 
-    public static double minScale = 0.19;
-    public static double maxScale = 0.55;
+    public static double minScale = 0.1;
+    public static double maxScale = 0.50;
 
     public ClawIntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, double initial_position) {
         m_hardwareMap=hardwareMap;
