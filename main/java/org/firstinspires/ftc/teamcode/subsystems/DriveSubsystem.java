@@ -55,8 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
         );
 
 //        Vector2d CorrectedInput = quadraticControlLaw(input_vec);
-//        Vector2d CorrectedInput = potentialFields(input_vec);
-        Vector2d CorrectedInput = input_vec;
+        Vector2d CorrectedInput = potentialFields(input_vec);
+//        Vector2d CorrectedInput = input_vec;
 
         double throttleSlope = 1 - THROTTLEMINLEVEL;
         double throttleScale = throttleSlope * throttle + THROTTLEMINLEVEL;
@@ -89,12 +89,19 @@ public class DriveSubsystem extends SubsystemBase {
                 double dist = repulse_vec.norm();
 
                 if (dist < REPULSERADIUS) {
-                    Vector2d unit_repulse_vec = repulse_vec.div(dist);
+//                    m_telemetry.addData("dist: ",dist);
+//                    m_telemetry.addData("jx: ", junctionX[ix]);
+//                    m_telemetry.addData("jy: ", junctionY[iy]);
+                    Vector2d unit_repulse_vec = repulse_vec.div(dist + 0.01);
                     Vector2d new_vector = unit_repulse_vec.times(input_vec.norm() * PF_SCALE);
                     updated_input = input_vec.plus(new_vector);
                 }
             }
         }
+
+//        m_telemetry.addData("updateX: ",updated_input.getX());
+//        m_telemetry.addData("updateY: ", updated_input.getY());
+//        m_telemetry.update();
         return updated_input;
     }
 
