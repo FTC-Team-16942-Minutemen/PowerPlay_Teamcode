@@ -55,8 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
         );
 
 //        Vector2d CorrectedInput = quadraticControlLaw(input_vec);
-        Vector2d CorrectedInput = potentialFields(input_vec);
-//        Vector2d CorrectedInput = input_vec;
+//        Vector2d CorrectedInput = potentialFields(input_vec);
+        Vector2d CorrectedInput = input_vec;
 
         double throttleSlope = 1 - THROTTLEMINLEVEL;
         double throttleScale = throttleSlope * throttle + THROTTLEMINLEVEL;
