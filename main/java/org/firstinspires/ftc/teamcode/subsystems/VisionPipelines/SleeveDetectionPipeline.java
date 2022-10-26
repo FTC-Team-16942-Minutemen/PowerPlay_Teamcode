@@ -70,10 +70,10 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
     //green {50 to 80}
     //cyan  {100 to 110}
     //magenta {160 to 172}
-    public static int greenStart = 70;
+    public static int greenStart = 50;//was70
     public static int greenEnd = 90;
-    public static int cyanStart = 100;
-    public static int cyanEnd = 110;
+    public static int cyanStart = 90;//was100
+    public static int cyanEnd = 103;//was110
     public static int magentaStart = 160;
     public static int magentaEnd = 172;
     public int[] HstartArray = {magentaStart, greenStart, cyanStart};

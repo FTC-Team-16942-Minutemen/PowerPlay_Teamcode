@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -19,6 +20,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.AutoTargetingDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.ParkingCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.DistanceTrigger;
@@ -67,7 +69,7 @@ public class PowerPlayBot extends Robot {
         m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry, initialPose);
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
-        m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
+        m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 0.0);
 //        m_CascadingLinearSlide = new CascadingLinearSlide(m_hardwareMap, m_telemetry);
 //        m_DistanceSensorSubsystem = new DistanceSensorSubsystem(m_hardwareMap, m_telemetry);
 
@@ -173,21 +175,20 @@ public class PowerPlayBot extends Robot {
 //                m_command.schedule();
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-//                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft1")
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft3"),
-                        new TurnCommand(m_driveTrain, -3.1415926/2.0)
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft4"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6"),
-//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft5"),
-//                        new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft6")
+
+                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft1"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
+                        new ParallelCommandGroup(
+                                new TurnCommand(m_driveTrain, Math.toRadians(-90)),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.step(4);})),
+                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftCreep"),
+                        new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}),
+                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftPark2"),
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> {m_linearSlideSubsystem.step(-4);}),
+                                new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();})
+                        ),
+                        new ParkingCommand(m_driveTrain,m_visionSubsystem)
 
                 ));
     }
