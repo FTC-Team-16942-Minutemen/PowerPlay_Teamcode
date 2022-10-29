@@ -12,13 +12,19 @@ public class ParkingCommand extends CommandBase {
     private final VisionSubsystem m_visionSubsystem;
     private Trajectory m_trajectorySpot1;
     private Trajectory m_trajectorySpot0;
+    private Trajectory m_trajectorySpot2;
 
-    public ParkingCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem)
+    public ParkingCommand(DriveSubsystem driveSubsystem,
+                          VisionSubsystem visionSubsystem,
+                          String parkingTrajectory0,
+                          String parkingTrajectory1,
+                          String parkingTrajectory2)
     {
         m_driveSubsystem = driveSubsystem;
         m_visionSubsystem = visionSubsystem;
-        m_trajectorySpot1 = AssetsTrajectoryManager.load("BlueLeftParking1");
-        m_trajectorySpot0 = AssetsTrajectoryManager.load("BlueLeftParking0");
+        m_trajectorySpot2 = AssetsTrajectoryManager.load(parkingTrajectory2);
+        m_trajectorySpot1 = AssetsTrajectoryManager.load(parkingTrajectory1);
+        m_trajectorySpot0 = AssetsTrajectoryManager.load(parkingTrajectory0);
 
         addRequirements(driveSubsystem);
     }
@@ -30,13 +36,13 @@ public class ParkingCommand extends CommandBase {
         {
             m_driveSubsystem.followTrajectoryAsync(m_trajectorySpot0);
         }
-        else if (m_visionSubsystem.getParkingSpot() == 1)
+        else if (m_visionSubsystem.getParkingSpot() == 1) //green
         {
             m_driveSubsystem.followTrajectoryAsync(m_trajectorySpot1);
         }
-        else if (m_visionSubsystem.getParkingSpot() == 2)
+        else if (m_visionSubsystem.getParkingSpot() == 2) //cyan
         {
-
+            m_driveSubsystem.followTrajectoryAsync(m_trajectorySpot2);
         }
     }
 

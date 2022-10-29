@@ -44,24 +44,24 @@ import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 Autonomous OpMode script using Command-based Robot
  */
 
-@Autonomous(name="Auton_OpMode", group="Autonomous")
+@Autonomous(name="BlueRight_Auton", group="Autonomous")
 //@Disabled
-public class Auton_OpMode extends LinearOpMode {
+public class BlueRight_Auton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
         //Initialize the robot's Pose
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
-        Pose2d initialPose = new Pose2d(new Vector2d( 40.50, 65.0), Math.toRadians(-90.0));
+        Pose2d initialPose = new Pose2d(new Vector2d( -40.50, 65.0), Math.toRadians(-90.0));
 
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
-                Constants.OpModeType.AUTO,
+                Constants.OpModeType.BLUE_RIGHT_AUTO,
                 hardwareMap,
                 telemetry,
                 gamepad1,
-                initialPose);
+                initialPose, 0.0);
 
         getRuntime();
 
@@ -83,6 +83,7 @@ public class Auton_OpMode extends LinearOpMode {
 
         //Store the last post of the robot to a static
         PoseStorage.currentPose = m_robot.getRobotPose();
+        PoseStorage.allianceHeadingOffset = -90.0; //blue side
         m_robot.reset();
     }
 }

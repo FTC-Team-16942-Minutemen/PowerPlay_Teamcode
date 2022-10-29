@@ -14,8 +14,8 @@ public class ClawIntakeSubsystem extends SubsystemBase {
     Servo m_clawServo;
     double m_position;
 
-    public static double minScale = 0.1;
-    public static double maxScale = 0.50;
+    public static double minScale = 0.2;
+    public static double maxScale = 0.42;
 
     public ClawIntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, double initial_position) {
         m_hardwareMap=hardwareMap;
@@ -30,15 +30,23 @@ public class ClawIntakeSubsystem extends SubsystemBase {
         m_position = (m_position + 1.0) % 2.0;
     }
 
+    public void close()
+    {
+        m_position = 0.0;
+    }
+    public void open()
+    {
+        m_position = 1.0;
+    }
     @Override
     public void periodic() {
         m_clawServo.scaleRange(minScale, maxScale);
-        if(m_clawServo.getPosition() != m_position)
-        {
-            m_clawServo.setPosition(m_position);
-        }
-//        m_telemetry.addData("Servo Pos: ", m_clawServo.getPosition());
-//        m_telemetry.addData("Set Position: ", m_position);
-//        m_telemetry.update();
+//        if(m_clawServo.getPosition() != m_position)
+//        {
+        m_clawServo.setPosition(m_position);
+//        }
+        m_telemetry.addData("Servo Pos: ", m_clawServo.getPosition());
+        m_telemetry.addData("Set Position: ", m_position);
+        m_telemetry.update();
     }
 }

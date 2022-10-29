@@ -33,25 +33,27 @@ public class DriveSubsystem extends SubsystemBase {
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
     SampleMecanumDrive m_drive;
+    double m_allianceHeadingOffset;
     int[] junctionX = {-48,-24,0, 24, 48};
     int[] junctionY = {-48,-24,0, 24,48};
     double REPULSERADIUS = 9.0;
     double PF_SCALE = 1.0;
     double THROTTLEMINLEVEL = 0.4;
 
-    public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose)
+    public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose, double allianceHeadingOffset)
     {
         m_hardwareMap=hardwareMap;
         m_telemetry=telemetry;
         m_drive=new SampleMecanumDrive(m_hardwareMap, m_telemetry);
         m_drive.setPoseEstimate(initialPose);
+        m_allianceHeadingOffset = allianceHeadingOffset;
     }
 
     public void drive(double leftX, double leftY, double rightX, double throttle, boolean isFieldCentric)
     {
         Pose2d poseEstimate = getPoseEstimate();
         Vector2d input_vec = new Vector2d(leftY, leftX).rotated(
-                isFieldCentric ? -poseEstimate.getHeading() :0
+                isFieldCentric ? -(poseEstimate.getHeading() - Math.toRadians(m_allianceHeadingOffset)) :0
         );
 
 //        Vector2d CorrectedInput = quadraticControlLaw(input_vec);

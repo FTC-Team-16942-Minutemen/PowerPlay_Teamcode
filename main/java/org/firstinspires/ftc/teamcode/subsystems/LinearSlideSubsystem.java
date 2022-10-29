@@ -39,14 +39,14 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static double downElevatorPower = 0.6;
     public static double upElevatorPower = 1.0;
 
-    public static int junctionHigh = 2900; //was 3150
+    public static int junctionHigh = 2850; //was 3150
     public static int junctionMed = 2034;
     public static int junctionLow = 1300;
     public static int junctionGnd = 300;
     public static int lowestPoint = 0;
 
-    private int position_index = 0;
-    private int error = 0;
+    private int m_position_index = 0;
+    private int m_error = 0;
     int[] positions = {lowestPoint, junctionGnd, junctionLow, junctionMed, junctionHigh};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
@@ -63,12 +63,27 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public void step(int direction) {
-        position_index = position_index + direction;
-        if (position_index >= positions.length) {
-            position_index = positions.length - 1;
+        m_position_index = m_position_index + direction;
+        if (m_position_index >= positions.length) {
+            m_position_index = positions.length - 1;
         }
-        if (position_index < 0) {
-            position_index = 0;
+        if (m_position_index < 0) {
+            m_position_index = 0;
+        }
+
+        desiredPosition = positions[m_position_index];
+
+        m_LinearSlideMotor.setTargetPosition(desiredPosition);
+
+        m_error = desiredPosition - m_LinearSlideMotor.getCurrentPosition();
+
+        if(m_error >= 0)
+        {
+            m_LinearSlideMotor.setPower(upElevatorPower);
+        }
+        else
+        {
+            m_LinearSlideMotor.setPower(downElevatorPower);
         }
     }
     public void extend(double input) {
@@ -78,6 +93,29 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     }
 
+    public boolean isLinearSlideBusy()
+    {
+        return m_LinearSlideMotor.isBusy();
+    }
+
+    public int getPositionSetpoint() {
+        return m_LinearSlideMotor.getTargetPosition();
+    }
+
+    public void setPositionSetPoint(int positionSetpoint) {
+     m_LinearSlideMotor.setTargetPosition(positionSetpoint);
+    }
+
+    public void setElevatorPower(double power)
+    {
+        m_LinearSlideMotor.setPower(power);
+    }
+
+    public double getElevatorPower()
+    {
+        return m_LinearSlideMotor.getPower();
+    }
+
     @Override
     public void periodic() {
         positions[0] = lowestPoint;
@@ -85,25 +123,14 @@ public class LinearSlideSubsystem extends SubsystemBase {
         positions[2] = junctionLow;
         positions[3] = junctionMed;
         positions[4] = junctionHigh;
-        desiredPosition = positions[position_index];
        // m_telemetry.addData("TruePosition", m_LinearSlideMotor.getCurrentPosition());
         //m_telemetry.addData("DesiredPosition", desiredPosition);
         //m_telemetry.update();
         m_LinearSlideMotor.setVelocityPIDFCoefficients(p, i, d, f);
         m_LinearSlideMotor.setPositionPIDFCoefficients(position_p);
 //
-        m_LinearSlideMotor.setTargetPosition(desiredPosition);
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        error = desiredPosition - m_LinearSlideMotor.getCurrentPosition();
 
-        if(error >= 0)
-        {
-            m_LinearSlideMotor.setPower(upElevatorPower);
-        }
-        else
-        {
-            m_LinearSlideMotor.setPower(downElevatorPower);
-        }
     }
 
 
