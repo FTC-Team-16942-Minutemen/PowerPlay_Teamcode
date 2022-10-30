@@ -23,8 +23,9 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 @Config
 public class LinearSlideSubsystem extends SubsystemBase {
-    public static int desiredPosition = 0;
-    public static int positionSetpoint = 400;
+    public static int m_desiredPosition = 0;
+    public static int m_positionSetpoint = 400;
+    public static int MAXSTACKCOUNT = 5;
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
     DcMotorEx m_LinearSlideMotor;
@@ -45,9 +46,17 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int junctionGnd = 300;
     public static int lowestPoint = 0;
 
+    public static int cone0Pos = 0;
+    public static int cone1Pos = 100;
+    public static int cone2Pos = 200;
+    public static int cone3Pos = 300;
+    public static int cone4Pos = 400;
+
     private int m_position_index = 0;
+    private int m_stackPosition_index = 0;
     private int m_error = 0;
     int[] positions = {lowestPoint, junctionGnd, junctionLow, junctionMed, junctionHigh};
+    int[] stackPositions = {cone0Pos, cone1Pos, cone2Pos, cone3Pos, cone4Pos};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
     public LinearSlideSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -62,7 +71,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void step(int direction) {
+    public void junctionStep(int direction) {
         m_position_index = m_position_index + direction;
         if (m_position_index >= positions.length) {
             m_position_index = positions.length - 1;
@@ -71,11 +80,26 @@ public class LinearSlideSubsystem extends SubsystemBase {
             m_position_index = 0;
         }
 
-        desiredPosition = positions[m_position_index];
+        m_desiredPosition = positions[m_position_index];
 
-        m_LinearSlideMotor.setTargetPosition(desiredPosition);
+        m_LinearSlideMotor.setTargetPosition(m_desiredPosition);
+    }
 
-        m_error = desiredPosition - m_LinearSlideMotor.getCurrentPosition();
+    public void coneStackStep(int direction)
+    {
+        m_stackPosition_index = m_stackPosition_index + direction;
+        if(m_stackPosition_index == MAXSTACKCOUNT)
+        {
+            m_stackPosition_index = 0;
+        }
+
+        m_desiredPosition = stackPositions[m_stackPosition_index];
+        m_LinearSlideMotor.setTargetPosition(m_desiredPosition);
+    }
+
+    public void defaultPowerSlide()
+    {
+        m_error = m_desiredPosition - m_LinearSlideMotor.getCurrentPosition();
 
         if(m_error >= 0)
         {
@@ -104,7 +128,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public void setPositionSetPoint(int positionSetpoint) {
-     m_LinearSlideMotor.setTargetPosition(positionSetpoint);
+        m_LinearSlideMotor.setTargetPosition(positionSetpoint);
     }
 
     public void setElevatorPower(double power)

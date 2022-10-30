@@ -155,7 +155,7 @@ public class PowerPlayBot extends Robot {
 //                        m_linearSlideSubsystem,
 //                        ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)
 //                        ));
-        m_linearSlideSubsystem.setDefaultCommand(new InstantCommand(() -> {m_linearSlideSubsystem.step(0);}));
+        m_linearSlideSubsystem.setDefaultCommand(new InstantCommand(() -> {m_linearSlideSubsystem.defaultPowerSlide();}));
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
@@ -163,10 +163,15 @@ public class PowerPlayBot extends Robot {
                 ()->-m_gamePad1.getRightX(),
                 ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 true));
+
         m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(1);}));
+
         m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(-1);}));
+
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.coneStackStep(1);}));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
@@ -211,12 +216,12 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRight2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(4);})),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(4);})),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRightCreep"),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRightParking"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(-4);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(-4);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,
@@ -239,12 +244,12 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(-90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(4);})),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(4);})),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftCreep"),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftPark2"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(-4);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(-4);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,
@@ -267,12 +272,12 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(4);})),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(4);})),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRightCreep"),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRightPark"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(-4);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(-4);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,
@@ -295,12 +300,12 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeft2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(-90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(4);})),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(4);})),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeftCreep"),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeftPark"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.step(-4);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.junctionStep(-4);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,

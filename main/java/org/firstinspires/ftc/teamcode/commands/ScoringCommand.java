@@ -19,8 +19,8 @@ public class ScoringCommand extends CommandBase {
     private final LinearSlideSubsystem m_linearSlideSubsystem;
     private int m_currentSetPoint;
     private double m_currentPower;
-    public static int positionOffset = 300;
-    public static double powerScaling = 0.5;
+    public static int m_positionOffset = 400;
+    public static double m_powerScaling = 0.5;
 
     private final DoubleSupplier m_leftTriggerSupplier;
 
@@ -41,7 +41,7 @@ public class ScoringCommand extends CommandBase {
     {
        m_currentSetPoint= m_linearSlideSubsystem.getPositionSetpoint();
        m_currentPower = m_linearSlideSubsystem.getElevatorPower();
-       int newSetPoint = m_currentSetPoint - positionOffset;
+       int newSetPoint = m_currentSetPoint - m_positionOffset;
        if(newSetPoint < 0)
        {
            newSetPoint = 0;
@@ -52,7 +52,7 @@ public class ScoringCommand extends CommandBase {
     @Override
     public void execute()
     {
-        m_linearSlideSubsystem.setElevatorPower(m_leftTriggerSupplier.getAsDouble() * powerScaling);
+        m_linearSlideSubsystem.setElevatorPower(m_leftTriggerSupplier.getAsDouble() * m_powerScaling);
     }
 
     @Override
@@ -64,7 +64,9 @@ public class ScoringCommand extends CommandBase {
     @Override
     public void end(boolean interrupted)
     {
-        m_clawSubsystem.open();
+        if(!m_linearSlideSubsystem.isLinearSlideBusy()) {
+            m_clawSubsystem.open();
+        }
 //        m_linearSlideSubsystem.setPositionSetPoint(m_currentSetPoint);
 //        m_linearSlideSubsystem.setElevatorPower(m_currentPower);
 //        if(interrupted)
