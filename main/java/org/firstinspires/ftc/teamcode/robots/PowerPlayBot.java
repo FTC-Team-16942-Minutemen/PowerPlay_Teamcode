@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.ScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.DistanceTrigger;
+import org.firstinspires.ftc.teamcode.robots.triggers.LeftTriggerTrigger;
 import org.firstinspires.ftc.teamcode.robots.triggers.TimedTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
@@ -50,6 +51,7 @@ public class PowerPlayBot extends Robot {
     Command m_command;
 //    DistanceTrigger m_distanceTrigger;
 //    TimedTrigger m_timedParkingTrigger;
+    LeftTriggerTrigger m_leftTriggerTrigger;
 //    Timing.Timer m_timer;
 
     public PowerPlayBot(Constants.OpModeType type,
@@ -80,6 +82,7 @@ public class PowerPlayBot extends Robot {
 //        m_distanceTrigger = new DistanceTrigger(m_DistanceSensorSubsystem, 8);
         //m_timer = new Timing.Timer(29);
         //m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
+        m_leftTriggerTrigger = new LeftTriggerTrigger(m_gamePad1, 0.05);
 
         setupOpMode(type);
     }
@@ -137,7 +140,11 @@ public class PowerPlayBot extends Robot {
 
     private void setupTeleOp()
     {
-       //m_distanceTrigger.whenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}))
+        m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
+                m_linearSlideSubsystem,
+                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)));
+
+        //m_distanceTrigger.whenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}))
                //.whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
 //                .whenHeld(new InstantCommand(() -> {m_DistanceSensorSubsystem.getDistance();}));
@@ -148,6 +155,7 @@ public class PowerPlayBot extends Robot {
 //                        m_linearSlideSubsystem,
 //                        ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)
 //                        ));
+        m_linearSlideSubsystem.setDefaultCommand(new InstantCommand(() -> {m_linearSlideSubsystem.step(0);}));
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),

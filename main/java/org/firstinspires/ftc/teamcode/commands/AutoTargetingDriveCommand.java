@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 import java.util.function.DoubleSupplier;
-@Config
+
 public class AutoTargetingDriveCommand extends CommandBase {
     private final DriveSubsystem m_driveSubsystem;
     private final VisionSubsystem m_visionSubsystem;

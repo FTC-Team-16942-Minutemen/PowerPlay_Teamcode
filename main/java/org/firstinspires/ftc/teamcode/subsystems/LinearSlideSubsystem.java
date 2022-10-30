@@ -86,6 +86,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
             m_LinearSlideMotor.setPower(downElevatorPower);
         }
     }
+
     public void extend(double input) {
         m_LinearSlideMotor.setPower(input);
     }
