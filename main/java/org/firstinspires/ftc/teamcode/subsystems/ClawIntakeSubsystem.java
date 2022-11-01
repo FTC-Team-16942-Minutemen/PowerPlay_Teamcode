@@ -45,8 +45,8 @@ public class ClawIntakeSubsystem extends SubsystemBase {
 //        {
         m_clawServo.setPosition(m_position);
 //        }
-        m_telemetry.addData("Servo Pos: ", m_clawServo.getPosition());
-        m_telemetry.addData("Set Position: ", m_position);
-        m_telemetry.update();
+//        m_telemetry.addData("Servo Pos: ", m_clawServo.getPosition());
+//        m_telemetry.addData("Set Position: ", m_position);
+//        m_telemetry.update();
     }
 }

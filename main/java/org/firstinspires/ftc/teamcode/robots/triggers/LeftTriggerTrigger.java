@@ -20,7 +20,7 @@ public class LeftTriggerTrigger extends Trigger {
     @Override
     public boolean get()
     {
-        if(m_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) < m_inputThreshold)
+        if(m_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > m_inputThreshold)
         {
             return true;
         }

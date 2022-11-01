@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.robots.Constants.LinearSlideState;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -23,9 +25,9 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 @Config
 public class LinearSlideSubsystem extends SubsystemBase {
-    public static int m_desiredPosition = 0;
-    public static int m_positionSetpoint = 400;
-    public static int MAXSTACKCOUNT = 5;
+    public static final int MAXCONECOUNT = 5;
+    public static final int MAXJUNCTIONCOUNT = 4;
+
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
     DcMotorEx m_LinearSlideMotor;
@@ -44,18 +46,27 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int junctionMed = 2034;
     public static int junctionLow = 1300;
     public static int junctionGnd = 300;
-    public static int lowestPoint = 0;
 
     public static int cone0Pos = 0;
-    public static int cone1Pos = 100;
-    public static int cone2Pos = 200;
-    public static int cone3Pos = 300;
-    public static int cone4Pos = 400;
+    public static int cone1Pos = 130;
+    public static int cone2Pos = 230;
+    public static int cone3Pos = 330;
+    public static int cone4Pos = 430;
+
+    public static int acquiredOffset = 400;
+    public static int scoringOffset = 400;
 
     private int m_position_index = 0;
     private int m_stackPosition_index = 0;
     private int m_error = 0;
-    int[] positions = {lowestPoint, junctionGnd, junctionLow, junctionMed, junctionHigh};
+
+    private int m_targetPosition = 0;
+    private double m_targetPower = 0.0;
+    private LinearSlideState m_currentState;
+    private int m_junctionIndex = 0;
+    private int m_groundIndex = 0;
+
+    int[] junctionPositions = {junctionGnd, junctionLow, junctionMed, junctionHigh};
     int[] stackPositions = {cone0Pos, cone1Pos, cone2Pos, cone3Pos, cone4Pos};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
@@ -65,57 +76,98 @@ public class LinearSlideSubsystem extends SubsystemBase {
         m_LinearSlideMotor = hardwareMap.get(DcMotorEx.class, "LS");
         m_LinearSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m_LinearSlideMotor.setTargetPosition(0);
-
+        m_LinearSlideMotor.setTargetPosition(m_targetPosition);
+        m_currentState = LinearSlideState.GROUNDTARGETING;
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void junctionStep(int direction) {
-        m_position_index = m_position_index + direction;
-        if (m_position_index >= positions.length) {
-            m_position_index = positions.length - 1;
-        }
-        if (m_position_index < 0) {
-            m_position_index = 0;
-        }
-
-        m_desiredPosition = positions[m_position_index];
-
-        m_LinearSlideMotor.setTargetPosition(m_desiredPosition);
-    }
-
-    public void coneStackStep(int direction)
+    public void stateTransition(LinearSlideState requestedState)
     {
-        m_stackPosition_index = m_stackPosition_index + direction;
-        if(m_stackPosition_index == MAXSTACKCOUNT)
+        switch(requestedState)
         {
-            m_stackPosition_index = 0;
+            case JUNCTIONTARGETING:
+                if(m_currentState == requestedState)
+                {
+                    m_junctionIndex = (m_junctionIndex + 1) % MAXJUNCTIONCOUNT;
+                }
+                m_targetPosition = junctionPositions[m_junctionIndex];
+                m_currentState = requestedState;
+                break;
+            case SCORING:
+                if(m_currentState == requestedState)
+                {
+                }
+                else
+                {
+                    m_targetPosition = Math.max(m_LinearSlideMotor.getTargetPosition() - scoringOffset, 0);
+                }
+                m_currentState = requestedState;
+                break;
+            case ACQUIRED:
+                if(m_currentState == requestedState)
+                {
+//                    m_telemetry.addData("state: ", requestedState);
+                }
+                else
+                {
+                    m_targetPosition = Math.min(m_LinearSlideMotor.getTargetPosition() + acquiredOffset, junctionPositions[MAXJUNCTIONCOUNT-1]);
+                }
+//                m_telemetry.addData("m_acquiredIndex: ", m_acquiredIndex);
+//                m_telemetry.update();
+
+                m_currentState = requestedState;
+
+                break;
+            case GROUNDTARGETING:
+                if(m_currentState == requestedState)
+                {
+                    m_groundIndex = (m_groundIndex + 1) % MAXCONECOUNT;
+//                    m_telemetry.addData("state: ", requestedState);
+                }
+//                m_telemetry.addData("m_groundIndex: ", m_groundIndex);
+//                m_telemetry.update();
+                m_targetPosition = stackPositions[m_groundIndex];
+                m_currentState = requestedState;
+
+                break;
         }
 
-        m_desiredPosition = stackPositions[m_stackPosition_index];
-        m_LinearSlideMotor.setTargetPosition(m_desiredPosition);
+        m_targetPower = calcDefaultPower();
     }
 
-    public void defaultPowerSlide()
+    private double calcDefaultPower()
     {
-        m_error = m_desiredPosition - m_LinearSlideMotor.getCurrentPosition();
+        m_error = m_targetPosition - m_LinearSlideMotor.getCurrentPosition();
 
         if(m_error >= 0)
         {
-            m_LinearSlideMotor.setPower(upElevatorPower);
+            return upElevatorPower;
         }
         else
         {
-            m_LinearSlideMotor.setPower(downElevatorPower);
+            return downElevatorPower;
         }
     }
 
-    public void extend(double input) {
-        m_LinearSlideMotor.setPower(input);
-    }
-    public void stop() {
-
+    public void setState(LinearSlideState requestedState, int desiredIndex)
+    {
+        switch(requestedState)
+        {
+            case JUNCTIONTARGETING:
+                m_targetPosition = junctionPositions[desiredIndex];
+                m_junctionIndex = desiredIndex;
+                break;
+            case SCORING:
+                break;
+            case ACQUIRED:
+                break;
+            case GROUNDTARGETING:
+                m_targetPosition = stackPositions[desiredIndex];
+                m_groundIndex = desiredIndex;
+                break;
+        }
+        m_currentState = requestedState;
     }
 
     public boolean isLinearSlideBusy()
@@ -128,12 +180,12 @@ public class LinearSlideSubsystem extends SubsystemBase {
     }
 
     public void setPositionSetPoint(int positionSetpoint) {
-        m_LinearSlideMotor.setTargetPosition(positionSetpoint);
+        m_targetPosition = positionSetpoint;
     }
 
     public void setElevatorPower(double power)
     {
-        m_LinearSlideMotor.setPower(power);
+        m_targetPower = power;
     }
 
     public double getElevatorPower()
@@ -143,16 +195,24 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        positions[0] = lowestPoint;
-        positions[1] = junctionGnd;
-        positions[2] = junctionLow;
-        positions[3] = junctionMed;
-        positions[4] = junctionHigh;
+        junctionPositions[0] = junctionGnd;
+        junctionPositions[1] = junctionLow;
+        junctionPositions[2] = junctionMed;
+        junctionPositions[3] = junctionHigh;
+
+        stackPositions[0] = cone0Pos;
+        stackPositions[1] = cone1Pos;
+        stackPositions[2] = cone2Pos;
+        stackPositions[3] = cone3Pos;
+        stackPositions[4] = cone4Pos;
        // m_telemetry.addData("TruePosition", m_LinearSlideMotor.getCurrentPosition());
         //m_telemetry.addData("DesiredPosition", desiredPosition);
         //m_telemetry.update();
         m_LinearSlideMotor.setVelocityPIDFCoefficients(p, i, d, f);
         m_LinearSlideMotor.setPositionPIDFCoefficients(position_p);
+
+        m_LinearSlideMotor.setTargetPosition(m_targetPosition);
+        m_LinearSlideMotor.setPower(m_targetPower);
 //
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

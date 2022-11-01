@@ -10,4 +10,11 @@ public final class Constants
         RED_RIGHT_AUTO,
         RED_LEFT_AUTO,
     }
+
+    public enum LinearSlideState {
+        JUNCTIONTARGETING,
+        SCORING,
+        ACQUIRED,
+        GROUNDTARGETING
+    }
 }
