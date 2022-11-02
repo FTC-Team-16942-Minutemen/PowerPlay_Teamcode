@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 @Config
 public class LinearSlideSubsystem extends SubsystemBase {
     public static final int MAXCONECOUNT = 5;
-    public static final int MAXJUNCTIONCOUNT = 4;
+    public static final int MAXJUNCTIONCOUNT = 3;
 
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
@@ -66,7 +66,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     private int m_junctionIndex = 0;
     private int m_groundIndex = 0;
 
-    int[] junctionPositions = {junctionGnd, junctionLow, junctionMed, junctionHigh};
+    int[] junctionPositions = { junctionLow, junctionMed, junctionHigh};
     int[] stackPositions = {cone0Pos, cone1Pos, cone2Pos, cone3Pos, cone4Pos};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
@@ -195,10 +195,9 @@ public class LinearSlideSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        junctionPositions[0] = junctionGnd;
-        junctionPositions[1] = junctionLow;
-        junctionPositions[2] = junctionMed;
-        junctionPositions[3] = junctionHigh;
+        junctionPositions[0] = junctionLow;
+        junctionPositions[1] = junctionMed;
+        junctionPositions[2] = junctionHigh;
 
         stackPositions[0] = cone0Pos;
         stackPositions[1] = cone1Pos;

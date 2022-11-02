@@ -157,7 +157,7 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
 
         input.copyTo(input_withContours);
         Imgproc.putText(input_withContours,
-                "Spot:" + Integer.toString(maxAreaIndex),
+                "Spot:" + Integer.toString(maxAreaIndex + 1),
                 new Point(50,150), Imgproc.FONT_HERSHEY_SIMPLEX, 3, new Scalar(255),3);
 
 //        if (contours.size() != 0 )
