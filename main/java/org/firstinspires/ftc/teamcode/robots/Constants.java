@@ -17,4 +17,9 @@ public final class Constants
         ACQUIRED,
         GROUNDTARGETING
     }
+
+    public enum OperatorMode {
+        SINGLE_OPERATOR_MODE,
+        DOUBLE_OPERATOR_MODE
+    }
 }

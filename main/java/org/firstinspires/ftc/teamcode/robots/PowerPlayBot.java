@@ -41,6 +41,7 @@ public class PowerPlayBot extends Robot {
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
     GamepadEx m_gamePad1;
+    GamepadEx m_gamePad2;
 
     //Subsystems
     DriveSubsystem m_driveTrain;
@@ -60,12 +61,14 @@ public class PowerPlayBot extends Robot {
                      HardwareMap hardwareMap,
                      Telemetry telemetry,
                      Gamepad gamePad1,
+                        Gamepad gamePad2,
                         Pose2d initialPose,
                         double allianceHeadingOffset)
     {
         //Initialize basic hardware structures
         m_hardwareMap = hardwareMap;
         m_gamePad1 = new GamepadEx(gamePad1);
+        m_gamePad2 = new GamepadEx(gamePad2);
         m_telemetry = telemetry;
 
         //Setup the FTC dashboard with it's enhanced telemetry
@@ -153,21 +156,26 @@ public class PowerPlayBot extends Robot {
                 ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 true));
 
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);}));
 
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDTARGETING);}));
 
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.X)
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenPressed(new SequentialCommandGroup(
                         new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
                         new WaitCommand(300),
                         new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.ACQUIRED);})));
 
-//        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
-//                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.coneStackStep(1);}));
-//
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(2);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(0);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(1);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.BACK)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.toggleOperatorMode();}));
     }
 
 

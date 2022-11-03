@@ -58,6 +58,7 @@ public class RedRight_Auton extends LinearOpMode {
                 hardwareMap,
                 telemetry,
                 gamepad1,
+                gamepad2,
                 initialPose, 0.0);
 
         getRuntime();

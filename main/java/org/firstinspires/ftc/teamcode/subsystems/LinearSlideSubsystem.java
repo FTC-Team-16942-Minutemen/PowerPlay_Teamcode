@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robots.Constants.OperatorMode;
 
 @Config
 public class LinearSlideSubsystem extends SubsystemBase {
@@ -65,6 +66,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     private LinearSlideState m_currentState;
     private int m_junctionIndex = 0;
     private int m_groundIndex = 0;
+    private OperatorMode m_operatorMode = OperatorMode.DOUBLE_OPERATOR_MODE;
 
     int[] junctionPositions = { junctionLow, junctionMed, junctionHigh};
     int[] stackPositions = {cone0Pos, cone1Pos, cone2Pos, cone3Pos, cone4Pos};
@@ -87,7 +89,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
         switch(requestedState)
         {
             case JUNCTIONTARGETING:
-                if(m_currentState == requestedState)
+                if((m_currentState == requestedState) & (m_operatorMode == OperatorMode.SINGLE_OPERATOR_MODE)) // only passing the junction level setting to the 2nd controller
                 {
                     m_junctionIndex = (m_junctionIndex + 1) % MAXJUNCTIONCOUNT;
                 }
@@ -168,6 +170,21 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 break;
         }
         m_currentState = requestedState;
+    }
+
+    public void setJunctionLevel(int desiredLevelIndex)
+    {
+        if(m_operatorMode == OperatorMode.DOUBLE_OPERATOR_MODE)
+        {
+            m_junctionIndex = desiredLevelIndex;
+            m_telemetry.addData("index: ", m_junctionIndex);
+            m_telemetry.update();
+        }
+    }
+
+    public void toggleOperatorMode()
+    {
+        m_operatorMode = (m_operatorMode == OperatorMode.SINGLE_OPERATOR_MODE) ? OperatorMode.DOUBLE_OPERATOR_MODE : OperatorMode.SINGLE_OPERATOR_MODE;
     }
 
     public boolean isLinearSlideBusy()

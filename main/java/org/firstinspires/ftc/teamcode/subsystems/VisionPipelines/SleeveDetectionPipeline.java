@@ -82,6 +82,8 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
 
     public static int erodedMaskLevel = 0;
 
+    public static int rowCutoff = 170;
+
     MatOfPoint poly = new MatOfPoint();
     MatOfPoint2f poly2f = new MatOfPoint2f();
     MatOfPoint2f dst2f = new MatOfPoint2f();
@@ -118,6 +120,11 @@ public class SleeveDetectionPipeline extends OpenCvPipeline {
                     new Scalar(HstartArray[n], 50, 50),
                     new Scalar(HendArray[n], 255, 255),
                     mask);
+
+            for(int m = 0; m < rowCutoff; m++)
+            {
+                mask.row(m).setTo(new Scalar(0));
+            }
 
             //Erode/Dialate the image to get rid of small pixels
             Imgproc.erode(mask, erodedMask, kernel);
