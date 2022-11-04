@@ -157,13 +157,13 @@ public class PowerPlayBot extends Robot {
                 true));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);}));
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);}));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDTARGETING);}));
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.STACKLEVEL);}));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}));
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenPressed(new SequentialCommandGroup(
@@ -177,8 +177,18 @@ public class PowerPlayBot extends Robot {
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(0);}));
         m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(1);}));
+
         m_gamePad2.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.toggleOperatorMode();}));
+
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(3);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(2);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(1);}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(0);}));
     }
 
 
@@ -198,7 +208,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRight2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONTARGETING, 2);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRightCreep"),
                         new SequentialCommandGroup(
@@ -206,11 +216,11 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRightParking"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();})
                         ),
                         new ParkingCommand(m_driveTrain, m_visionSubsystem,
@@ -237,7 +247,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(-92)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONTARGETING, 2);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftCreep"),
                         new SequentialCommandGroup(
@@ -245,11 +255,11 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftPark2"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();})
                         ),
                         new ParkingCommand(m_driveTrain, m_visionSubsystem,
@@ -275,7 +285,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(92)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONTARGETING, 2);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRightCreep"),
                         new SequentialCommandGroup(
@@ -283,11 +293,11 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRightPark"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,
@@ -313,7 +323,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeft2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(-90)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONTARGETING, 2);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeftCreep"),
                         new SequentialCommandGroup(
@@ -321,11 +331,11 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONTARGETING);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedLeftPark"),
                         new ParallelCommandGroup(
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();})
                         ),
                         new ParkingCommand(m_driveTrain,m_visionSubsystem ,

@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.robots.Constants.OperatorMode;
 
 @Config
 public class LinearSlideSubsystem extends SubsystemBase {
-    public static final int MAXCONECOUNT = 5;
+    public static final int MAXCONECOUNT = 4;
     public static final int MAXJUNCTIONCOUNT = 3;
 
     HardwareMap m_hardwareMap;
@@ -48,7 +48,6 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int junctionLow = 1300;
     public static int junctionGnd = 300;
 
-    public static int cone0Pos = 0;
     public static int cone1Pos = 130;
     public static int cone2Pos = 230;
     public static int cone3Pos = 330;
@@ -65,11 +64,11 @@ public class LinearSlideSubsystem extends SubsystemBase {
     private double m_targetPower = 0.0;
     private LinearSlideState m_currentState;
     private int m_junctionIndex = 0;
-    private int m_groundIndex = 0;
+    private int m_stackIndex = 0;
     private OperatorMode m_operatorMode = OperatorMode.DOUBLE_OPERATOR_MODE;
 
     int[] junctionPositions = { junctionLow, junctionMed, junctionHigh};
-    int[] stackPositions = {cone0Pos, cone1Pos, cone2Pos, cone3Pos, cone4Pos};
+    int[] stackPositions = {cone1Pos, cone2Pos, cone3Pos, cone4Pos};
     //high junction: 2900   medium junction: 1500   small Junction: 750  ground:
 
     public LinearSlideSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -79,7 +78,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
         m_LinearSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m_LinearSlideMotor.setTargetPosition(m_targetPosition);
-        m_currentState = LinearSlideState.GROUNDTARGETING;
+        m_currentState = LinearSlideState.GROUNDLEVEL;
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -88,10 +87,10 @@ public class LinearSlideSubsystem extends SubsystemBase {
     {
         switch(requestedState)
         {
-            case JUNCTIONTARGETING:
+            case JUNCTIONLEVEL:
                 if((m_currentState == requestedState) & (m_operatorMode == OperatorMode.SINGLE_OPERATOR_MODE)) // only passing the junction level setting to the 2nd controller
                 {
-                    m_junctionIndex = (m_junctionIndex + 1) % MAXJUNCTIONCOUNT;
+                    m_junctionIndex = (m_junctionIndex + 1) % junctionPositions.length;
                 }
                 m_targetPosition = junctionPositions[m_junctionIndex];
                 m_currentState = requestedState;
@@ -113,7 +112,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 }
                 else
                 {
-                    m_targetPosition = Math.min(m_LinearSlideMotor.getTargetPosition() + acquiredOffset, junctionPositions[MAXJUNCTIONCOUNT-1]);
+                    m_targetPosition = Math.min(m_LinearSlideMotor.getTargetPosition() + acquiredOffset, junctionPositions[junctionPositions.length-1]);
                 }
 //                m_telemetry.addData("m_acquiredIndex: ", m_acquiredIndex);
 //                m_telemetry.update();
@@ -121,17 +120,21 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 m_currentState = requestedState;
 
                 break;
-            case GROUNDTARGETING:
-                if(m_currentState == requestedState)
+            case STACKLEVEL:
+                if((m_currentState == requestedState) & (m_operatorMode == OperatorMode.SINGLE_OPERATOR_MODE)) // only passing the junction level setting to the 2nd controller
                 {
-                    m_groundIndex = (m_groundIndex + 1) % MAXCONECOUNT;
+                    m_stackIndex = (m_stackIndex + 1) % stackPositions.length;
 //                    m_telemetry.addData("state: ", requestedState);
                 }
-//                m_telemetry.addData("m_groundIndex: ", m_groundIndex);
+//                m_telemetry.addData("m_stackIndex: ", m_stackIndex);
 //                m_telemetry.update();
-                m_targetPosition = stackPositions[m_groundIndex];
+                m_targetPosition = stackPositions[m_stackIndex];
                 m_currentState = requestedState;
 
+                break;
+            case GROUNDLEVEL:
+                m_targetPosition = 0;
+                m_currentState = requestedState;
                 break;
         }
 
@@ -156,7 +159,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     {
         switch(requestedState)
         {
-            case JUNCTIONTARGETING:
+            case JUNCTIONLEVEL:
                 m_targetPosition = junctionPositions[desiredIndex];
                 m_junctionIndex = desiredIndex;
                 break;
@@ -164,9 +167,12 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 break;
             case ACQUIRED:
                 break;
-            case GROUNDTARGETING:
+            case STACKLEVEL:
                 m_targetPosition = stackPositions[desiredIndex];
-                m_groundIndex = desiredIndex;
+                m_stackIndex = desiredIndex;
+                break;
+            case GROUNDLEVEL:
+                m_targetPosition = 0;
                 break;
         }
         m_currentState = requestedState;
@@ -177,7 +183,17 @@ public class LinearSlideSubsystem extends SubsystemBase {
         if(m_operatorMode == OperatorMode.DOUBLE_OPERATOR_MODE)
         {
             m_junctionIndex = desiredLevelIndex;
-            m_telemetry.addData("index: ", m_junctionIndex);
+            m_telemetry.addData("JUNCTION index: ", m_junctionIndex);
+            m_telemetry.update();
+        }
+    }
+
+    public void setStackLevel(int desiredLevelIndex)
+    {
+        if(m_operatorMode == OperatorMode.DOUBLE_OPERATOR_MODE)
+        {
+            m_stackIndex = desiredLevelIndex;
+            m_telemetry.addData("STACK index: ", m_stackIndex);
             m_telemetry.update();
         }
     }
@@ -216,11 +232,10 @@ public class LinearSlideSubsystem extends SubsystemBase {
         junctionPositions[1] = junctionMed;
         junctionPositions[2] = junctionHigh;
 
-        stackPositions[0] = cone0Pos;
-        stackPositions[1] = cone1Pos;
-        stackPositions[2] = cone2Pos;
-        stackPositions[3] = cone3Pos;
-        stackPositions[4] = cone4Pos;
+        stackPositions[0] = cone1Pos;
+        stackPositions[1] = cone2Pos;
+        stackPositions[2] = cone3Pos;
+        stackPositions[3] = cone4Pos;
        // m_telemetry.addData("TruePosition", m_LinearSlideMotor.getCurrentPosition());
         //m_telemetry.addData("DesiredPosition", desiredPosition);
         //m_telemetry.update();

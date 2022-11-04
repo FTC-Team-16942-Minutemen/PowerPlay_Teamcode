@@ -12,10 +12,11 @@ public final class Constants
     }
 
     public enum LinearSlideState {
-        JUNCTIONTARGETING,
+        JUNCTIONLEVEL,
         SCORING,
         ACQUIRED,
-        GROUNDTARGETING
+        STACKLEVEL,
+        GROUNDLEVEL
     }
 
     public enum OperatorMode {
