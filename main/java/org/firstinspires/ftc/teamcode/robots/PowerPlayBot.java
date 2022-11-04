@@ -162,6 +162,9 @@ public class PowerPlayBot extends Robot {
         m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDTARGETING);}));
 
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDTARGETING, 0);}));
+
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenPressed(new SequentialCommandGroup(
                         new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
@@ -233,7 +236,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft1"),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft2"),
                         new ParallelCommandGroup(
-                                new TurnCommand(m_driveTrain, Math.toRadians(-90)),
+                                new TurnCommand(m_driveTrain, Math.toRadians(-92)),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONTARGETING, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeftCreep"),
