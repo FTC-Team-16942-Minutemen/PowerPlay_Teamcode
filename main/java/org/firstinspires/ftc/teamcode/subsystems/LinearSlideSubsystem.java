@@ -172,7 +172,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 m_stackIndex = desiredIndex;
                 break;
             case GROUNDLEVEL:
-                m_targetPosition = 0;
+                m_targetPosition = -25;
                 break;
         }
         m_currentState = requestedState;
@@ -196,6 +196,12 @@ public class LinearSlideSubsystem extends SubsystemBase {
             m_telemetry.addData("STACK index: ", m_stackIndex);
             m_telemetry.update();
         }
+    }
+
+    public void setBeaconCap()
+    {
+        m_targetPosition = Math.max(m_targetPosition - scoringOffset - scoringOffset, 0);
+        m_targetPower = calcDefaultPower() * 0.5;
     }
 
     public void toggleOperatorMode()
