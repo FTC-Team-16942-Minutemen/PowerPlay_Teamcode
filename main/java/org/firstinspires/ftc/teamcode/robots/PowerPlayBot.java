@@ -196,6 +196,9 @@ public class PowerPlayBot extends Robot {
         m_gamePad2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(0);}));
 
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.lowerSlide(50);}))
+                .whenReleased(new InstantCommand(() -> {m_linearSlideSubsystem.resetEncoder();}));
 
 
     }
@@ -213,6 +216,7 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.ACQUIRED);})
                         ),
+
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRight1"),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueRight2"),
                         new ParallelCommandGroup(

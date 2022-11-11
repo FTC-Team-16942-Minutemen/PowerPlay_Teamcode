@@ -232,6 +232,19 @@ public class LinearSlideSubsystem extends SubsystemBase {
         return m_LinearSlideMotor.getPower();
     }
 
+    public void lowerSlide(int offset) {
+        m_targetPosition = m_targetPosition - offset;
+        m_telemetry.addData("m_targetPos: ", m_targetPosition);
+        m_telemetry.update();
+
+    }
+
+    public void resetEncoder(){
+        m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        m_targetPosition = 0;
+        m_currentState = LinearSlideState.GROUNDLEVEL;
+    }
+
     @Override
     public void periodic() {
         junctionPositions[0] = junctionLow;
