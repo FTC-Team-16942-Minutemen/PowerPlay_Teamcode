@@ -107,6 +107,11 @@ public class DriveSubsystem extends SubsystemBase {
         return updated_input;
     }
 
+    public void correctHeadingOffset()
+    {
+        m_allianceHeadingOffset = Math.toDegrees(getPoseEstimate().getHeading());
+    }
+
     public void update()
     {
         m_drive.update();

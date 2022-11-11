@@ -197,10 +197,11 @@ public class PowerPlayBot extends Robot {
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(0);}));
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.lowerSlide(50);}))
+                .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.lowerSlide();}))
                 .whenReleased(new InstantCommand(() -> {m_linearSlideSubsystem.resetEncoder();}));
 
-
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenPressed(new InstantCommand(() -> {m_driveTrain.correctHeadingOffset();}));
     }
 
 
