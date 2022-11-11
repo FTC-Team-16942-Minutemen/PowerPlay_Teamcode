@@ -255,18 +255,15 @@ public class LinearSlideSubsystem extends SubsystemBase {
         stackPositions[1] = cone2Pos;
         stackPositions[2] = cone3Pos;
         stackPositions[3] = cone4Pos;
-        m_telemetry.addData("TruePosition: ", m_LinearSlideMotor.getCurrentPosition());
-        m_telemetry.addData("DesiredPosition: ", m_targetPosition);
-        m_telemetry.addData("DesiredPower: ", m_targetPower);
-        m_telemetry.update();
+//        m_telemetry.addData("TruePosition: ", m_LinearSlideMotor.getCurrentPosition());
+//        m_telemetry.addData("DesiredPosition: ", m_targetPosition);
+//        m_telemetry.addData("DesiredPower: ", m_targetPower);
+//        m_telemetry.update();
         m_LinearSlideMotor.setVelocityPIDFCoefficients(p, i, d, f);
         m_LinearSlideMotor.setPositionPIDFCoefficients(position_p);
 
         m_LinearSlideMotor.setTargetPosition(m_targetPosition);
         m_LinearSlideMotor.setPower(m_targetPower);
-//
-//        m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
     }
 
 
