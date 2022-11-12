@@ -39,6 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
     double REPULSERADIUS = 9.0;
     double PF_SCALE = 1.0;
     double THROTTLEMINLEVEL = 0.4;
+    boolean m_isPotentialFieldEn = false;
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose, double allianceHeadingOffset)
     {
@@ -57,8 +58,12 @@ public class DriveSubsystem extends SubsystemBase {
         );
 
 //        Vector2d CorrectedInput = quadraticControlLaw(input_vec);
-//        Vector2d CorrectedInput = potentialFields(input_vec);
         Vector2d CorrectedInput = input_vec;
+
+        if(m_isPotentialFieldEn)
+        {
+            CorrectedInput = potentialFields(input_vec);
+        }
 
         double throttleSlope = 1 - THROTTLEMINLEVEL;
         double throttleScale = throttleSlope * throttle + THROTTLEMINLEVEL;
@@ -78,6 +83,11 @@ public class DriveSubsystem extends SubsystemBase {
         return new Vector2d(outX, outY);
     }
 
+    public void TogglePotentialFields()
+    {
+        m_isPotentialFieldEn = !m_isPotentialFieldEn;
+    }
+
     private Vector2d potentialFields(Vector2d input_vec) {
         Vector2d updated_input = input_vec;
         Pose2d poseEstimate = getPoseEstimate();
@@ -86,23 +96,30 @@ public class DriveSubsystem extends SubsystemBase {
             for (int iy = 0; iy < junctionY.length; iy++) {
                 Vector2d r_vec = new Vector2d(poseEstimate.getX(), poseEstimate.getY());
                 Vector2d j_vec = new Vector2d(junctionX[ix], junctionY[iy]);
-                Vector2d repulse_vec = r_vec.minus(j_vec);
+
+                //rotate the repulsion vector into the same frame as the input vector (not sure why the minus sign)
+                Vector2d repulse_vec = r_vec.minus(j_vec).rotated(-Math.toRadians(m_allianceHeadingOffset));
 
                 double dist = repulse_vec.norm();
 
                 if (dist < REPULSERADIUS) {
-//                    m_telemetry.addData("dist: ",dist);
-//                    m_telemetry.addData("jx: ", junctionX[ix]);
-//                    m_telemetry.addData("jy: ", junctionY[iy]);
                     Vector2d unit_repulse_vec = repulse_vec.div(dist + 0.01);
                     Vector2d new_vector = unit_repulse_vec.times(input_vec.norm() * PF_SCALE);
                     updated_input = input_vec.plus(new_vector);
+//                    m_telemetry.addData("dist: ",dist);
+//                    m_telemetry.addData("jx: ", junctionX[ix]);
+//                    m_telemetry.addData("jy: ", junctionY[iy]);
+//                    m_telemetry.addData("headingOffset: ", m_allianceHeadingOffset);
+//                    m_telemetry.addData("unit_repulse_vecX: ", unit_repulse_vec.getX());
+//                    m_telemetry.addData("unit_repulse_vecY: ", unit_repulse_vec.getY());
+//                    m_telemetry.addData("new_vectorX: ", new_vector.getX());
+//                    m_telemetry.addData("new_vectorY: ", new_vector.getY());
                 }
             }
         }
 
-//        m_telemetry.addData("updateX: ",updated_input.getX());
-//        m_telemetry.addData("updateY: ", updated_input.getY());
+//        m_telemetry.addData("updated_inputX: ",updated_input.getX());
+//        m_telemetry.addData("updated_inputY: ", updated_input.getY());
 //        m_telemetry.update();
         return updated_input;
     }
@@ -145,6 +162,13 @@ public class DriveSubsystem extends SubsystemBase {
     public void updatePoseEstimate()
     {
         m_drive.updatePoseEstimate();
+    }
+
+    @Override
+    public void periodic() {
+        m_drive.updatePoseEstimate();
+        m_telemetry.addData("Potential Fields Enabled: ", m_isPotentialFieldEn);
+        m_telemetry.update();
     }
 
 }

@@ -186,6 +186,8 @@ public class PowerPlayBot extends Robot {
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.toggleOperatorMode();}));
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.START)
+                        .whenPressed(new InstantCommand(() -> {m_driveTrain.TogglePotentialFields();}));
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(3);}));

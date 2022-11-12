@@ -229,7 +229,6 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void update() {
-        updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
@@ -271,8 +270,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         Pose2d vel = new Pose2d(VX_WEIGHT*drivePower.getX(),
                 VY_WEIGHT*drivePower.getY(),
                 OMEGA_WEIGHT*drivePower.getHeading());
-
-
     }
 
     public void setWeightedDrivePower(Pose2d drivePower) {
