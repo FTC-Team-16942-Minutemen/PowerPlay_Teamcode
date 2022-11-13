@@ -34,10 +34,12 @@ public class ClawIntakeSubsystem extends SubsystemBase {
     {
         m_position = 0.0;
     }
+
     public void open()
     {
         m_position = 1.0;
     }
+
     @Override
     public void periodic() {
         m_clawServo.scaleRange(minScale, maxScale);

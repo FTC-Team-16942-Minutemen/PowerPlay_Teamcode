@@ -39,7 +39,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static double d = 1.0;
     public static double f = 14.0;
 
-    public static double position_p = 8.0;
+    public static double position_p = 8.5;
     public static double downElevatorPower = 0.6;
     public static double upElevatorPower = 1.0;
 
