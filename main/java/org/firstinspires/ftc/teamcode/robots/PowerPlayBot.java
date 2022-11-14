@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -12,25 +11,19 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.AutoTargetingDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ParkingCommand;
 import org.firstinspires.ftc.teamcode.commands.ScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
-import org.firstinspires.ftc.teamcode.robots.triggers.DistanceTrigger;
 import org.firstinspires.ftc.teamcode.robots.triggers.LeftTriggerTrigger;
-import org.firstinspires.ftc.teamcode.robots.triggers.TimedTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
@@ -48,7 +41,6 @@ public class PowerPlayBot extends Robot {
     LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
     ClawIntakeSubsystem m_clawIntakeSubsystem;
-    //CascadingLinearSlide m_CascadingLinearSlide;
     //DistanceSensorSubsystem m_DistanceSensorSubsystem;
 
     Command m_command;
@@ -79,7 +71,6 @@ public class PowerPlayBot extends Robot {
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
-//        m_CascadingLinearSlide = new CascadingLinearSlide(m_hardwareMap, m_telemetry);
 //        m_DistanceSensorSubsystem = new DistanceSensorSubsystem(m_hardwareMap, m_telemetry);
 
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
