@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.robots.triggers;
 
 import com.arcrobotics.ftclib.command.button.Trigger;
-import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 
 public class TimedTrigger extends Trigger {
 

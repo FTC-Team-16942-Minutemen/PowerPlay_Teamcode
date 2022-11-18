@@ -2,23 +2,23 @@ package org.firstinspires.ftc.teamcode.robots.triggers;
 
 import com.arcrobotics.ftclib.command.button.Trigger;
 
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.AlignmentSubsystem;
 
 public class DistanceTrigger extends Trigger {
 
-    DistanceSensorSubsystem m_distanceSensorSubsystem;
+    AlignmentSubsystem m_alignmentSubsystem;
     double m_distanceThreshold;
 
-    public DistanceTrigger(DistanceSensorSubsystem distanceSensorSubsystem, double distanceThreshold)
+    public DistanceTrigger(AlignmentSubsystem alignmentSubsystem, double distanceThreshold)
     {
-        m_distanceSensorSubsystem = distanceSensorSubsystem;
+        m_alignmentSubsystem = alignmentSubsystem;
         m_distanceThreshold = distanceThreshold;
     }
 
     @Override
     public boolean get()
     {
-        if(m_distanceSensorSubsystem.getDistance() < m_distanceThreshold)
+        if(m_alignmentSubsystem.getDistance() < m_distanceThreshold)
         {
             return true;
         }

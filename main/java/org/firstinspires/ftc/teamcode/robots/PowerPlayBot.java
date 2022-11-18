@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.AlignmentCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ParkingCommand;
 import org.firstinspires.ftc.teamcode.commands.ScoringCommand;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.LeftTriggerTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.AlignmentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
@@ -41,7 +43,7 @@ public class PowerPlayBot extends Robot {
     LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
     ClawIntakeSubsystem m_clawIntakeSubsystem;
-    //DistanceSensorSubsystem m_DistanceSensorSubsystem;
+    AlignmentSubsystem m_AlignmentSubsystem;
 
     Command m_command;
 //    DistanceTrigger m_distanceTrigger;
@@ -71,7 +73,7 @@ public class PowerPlayBot extends Robot {
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
-//        m_DistanceSensorSubsystem = new DistanceSensorSubsystem(m_hardwareMap, m_telemetry);
+        m_AlignmentSubsystem = new AlignmentSubsystem(m_hardwareMap, m_telemetry);
 
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
 //        m_command = new TrajectoryFollowerCommand(m_driveTrain, "TestPath");//was TestPath
@@ -166,7 +168,13 @@ public class PowerPlayBot extends Robot {
                         new InstantCommand(() -> {m_linearSlideSubsystem.setBeaconCap();}),
                         new WaitCommand(1000),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.open();})));
-
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
+                        .whenHeld(new AlignmentCommand(m_AlignmentSubsystem, m_driveTrain,
+                                ()->m_gamePad1.getLeftY(),
+                                ()->-m_gamePad1.getLeftX(),
+                                ()->-m_gamePad1.getRightX(),
+                                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
+                                true));
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(2);}));
@@ -175,9 +183,9 @@ public class PowerPlayBot extends Robot {
         m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(1);}));
 
+//        m_gamePad2.getGamepadButton(GamepadKeys.Button.BACK)
+//                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.toggleOperatorMode();}));
         m_gamePad2.getGamepadButton(GamepadKeys.Button.BACK)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.toggleOperatorMode();}));
-        m_gamePad2.getGamepadButton(GamepadKeys.Button.START)
                         .whenPressed(new InstantCommand(() -> {m_driveTrain.TogglePotentialFields();}));
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.Y)
@@ -189,7 +197,7 @@ public class PowerPlayBot extends Robot {
         m_gamePad2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setStackLevel(0);}));
 
-        m_gamePad2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        m_gamePad2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenHeld(new InstantCommand(() -> {m_linearSlideSubsystem.lowerSlide();}))
                 .whenReleased(new InstantCommand(() -> {m_linearSlideSubsystem.resetEncoder();}));
 

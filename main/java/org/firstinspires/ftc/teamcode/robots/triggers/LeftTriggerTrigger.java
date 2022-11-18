@@ -4,8 +4,6 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
-
 public class LeftTriggerTrigger extends Trigger {
 
     GamepadEx m_gamepad;
