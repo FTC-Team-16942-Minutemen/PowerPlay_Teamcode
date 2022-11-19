@@ -43,9 +43,9 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static double downElevatorPower = 0.6;
     public static double upElevatorPower = 1.0;
 
-    public static int junctionHigh = 2850; //was 3150
+    public static int junctionHigh = 2800; //was 3150
     public static int junctionMed = 2034;
-    public static int junctionLow = 1300;
+    public static int junctionLow = 1200;
     public static int junctionGnd = 300;
 
     public static int cone1Pos = 130;
@@ -54,7 +54,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int cone4Pos = 430;
 
     public static int acquiredOffset = 400;
-    public static int scoringOffset = 400;
+    public static int scoringOffset = 600;
 
     private int m_position_index = 0;
     private int m_stackPosition_index = 0;
@@ -176,6 +176,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
                 break;
         }
         m_currentState = requestedState;
+        m_targetPower = calcDefaultPower();
     }
 
     public void setJunctionLevel(int desiredLevelIndex)
