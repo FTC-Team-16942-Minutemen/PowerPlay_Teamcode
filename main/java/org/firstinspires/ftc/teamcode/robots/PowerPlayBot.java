@@ -140,7 +140,12 @@ public class PowerPlayBot extends Robot {
     {
         m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
                 m_linearSlideSubsystem,
-                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)));
+                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
+                .whenInactive(new SequentialCommandGroup(
+                            new WaitCommand(400),
+                            new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
+                        )
+                );
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),

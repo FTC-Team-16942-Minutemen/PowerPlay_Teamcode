@@ -77,6 +77,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
         m_LinearSlideMotor = hardwareMap.get(DcMotorEx.class, "LS");
         m_LinearSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         m_LinearSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        m_LinearSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         m_LinearSlideMotor.setTargetPosition(m_targetPosition);
         m_currentState = LinearSlideState.GROUNDLEVEL;
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

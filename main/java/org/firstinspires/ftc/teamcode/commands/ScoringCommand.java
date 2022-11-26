@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.roadrunner.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.robots.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
-import java.lang.ref.PhantomReference;
 import java.util.function.DoubleSupplier;
 
 @Config
@@ -31,7 +26,6 @@ public class ScoringCommand extends CommandBase {
         m_clawSubsystem = clawSubsystem;
         m_linearSlideSubsystem = slideSubsystem;
         m_leftTriggerSupplier = leftTriggerSupplier;
-
         addRequirements(m_clawSubsystem, m_linearSlideSubsystem);
     }
 
@@ -59,14 +53,8 @@ public class ScoringCommand extends CommandBase {
     @Override
     public void end(boolean interrupted)
     {
-//        if(!m_linearSlideSubsystem.isLinearSlideBusy()) {
-            m_clawSubsystem.open();
-
-//        }
+        m_clawSubsystem.open();
+        m_linearSlideSubsystem.setElevatorPower(0);
         m_linearSlideSubsystem.setPositionSetPoint(m_prevSetPoint);
-        m_linearSlideSubsystem.setElevatorPower(m_prevPower);
-//        if(interrupted)
-//        {
-//        }
     }
 }
