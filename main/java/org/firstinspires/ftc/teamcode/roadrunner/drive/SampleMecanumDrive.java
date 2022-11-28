@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -163,8 +164,8 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
-        //setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+//        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -229,6 +230,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void update() {
+//        updatePoseEstimate(); //Add this back in if running RR tuning scripts
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
@@ -338,6 +340,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 //        m_telemetry.addData("Power1:",v1/maxVal);
 //        m_telemetry.addData("Power2:",v2/maxVal);
 //        m_telemetry.addData("Power3:",v3/maxVal);
+
 //        m_telemetry.update();
 
         leftFront.setPower(v/maxVal);

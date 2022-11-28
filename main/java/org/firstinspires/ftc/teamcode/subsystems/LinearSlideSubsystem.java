@@ -54,7 +54,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int cone4Pos = 430;
 
     public static int acquiredOffset = 400;
-    public static int scoringOffset = 600;
+    public static int scoringOffset = 650;
 
     private int m_position_index = 0;
     private int m_stackPosition_index = 0;
