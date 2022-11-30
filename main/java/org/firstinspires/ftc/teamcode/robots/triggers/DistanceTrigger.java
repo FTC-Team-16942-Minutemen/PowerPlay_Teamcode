@@ -18,7 +18,7 @@ public class DistanceTrigger extends Trigger {
     @Override
     public boolean get()
     {
-        if(m_alignmentSubsystem.getDistance() < m_distanceThreshold)
+        if(m_alignmentSubsystem.getDistanceDifference() > m_distanceThreshold)
         {
             return true;
         }

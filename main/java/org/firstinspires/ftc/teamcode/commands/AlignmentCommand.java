@@ -23,7 +23,7 @@ public class AlignmentCommand extends CommandBase {
     private final DoubleSupplier m_rightXSupplier;
     private final DoubleSupplier m_rightTriggerSupplier;
     private boolean m_isFieldCentric;
-    public static double distanceSetPoint = 3.0;
+    public static double distanceSetPoint = 0.0;
 
     public static PIDCoefficients m_pidCoefficients = new PIDCoefficients(p, i, d);
     private PIDFController m_pidController;
@@ -64,7 +64,7 @@ public class AlignmentCommand extends CommandBase {
         }
         else
         {
-            double lateralDrive = m_pidController.update(m_alignmentSubsystem.getDistance());
+            double lateralDrive = m_pidController.update(m_alignmentSubsystem.getDistanceDifference());
 
             m_driveSubsystem.drive(lateralDrive,
                     0.0,

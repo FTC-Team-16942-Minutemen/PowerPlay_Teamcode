@@ -11,18 +11,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class AlignmentSubsystem extends SubsystemBase {
     HardwareMap m_hardwareMap;
     Telemetry m_telemetry;
-    DistanceSensor m_distanceSensor;
+    DistanceSensor m_distanceSensorA;
+    DistanceSensor m_distanceSensorB;
     DigitalChannel m_beamBreak;
 
     public AlignmentSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         m_hardwareMap=hardwareMap;
         m_telemetry=telemetry;
-        m_distanceSensor = hardwareMap.get(DistanceSensor.class,"DistanceSensor");
+        m_distanceSensorA = hardwareMap.get(DistanceSensor.class,"DistanceSensor");
+        m_distanceSensorB = hardwareMap.get(DistanceSensor.class,"DistanceSensorB");
         m_beamBreak = hardwareMap.get(DigitalChannel.class,"IRBB");
     }
 
-    public double getDistance() {
-        return m_distanceSensor.getDistance(DistanceUnit.INCH);
+    public double getDistanceDifference() {
+        return m_distanceSensorA.getDistance(DistanceUnit.INCH) - m_distanceSensorB.getDistance(DistanceUnit.INCH);
     }
 
     public boolean getBeamBreakState(){return m_beamBreak.getState();}

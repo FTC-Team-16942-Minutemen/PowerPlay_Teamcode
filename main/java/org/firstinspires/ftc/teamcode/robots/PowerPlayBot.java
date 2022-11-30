@@ -276,7 +276,7 @@ public class PowerPlayBot extends Robot {
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                                new WaitCommand(100),
+                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeftPark2"),
@@ -284,7 +284,7 @@ public class PowerPlayBot extends Robot {
 ////START OF NEW
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(180)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 3);})
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeftStack1"),
                         new SequentialCommandGroup(
@@ -302,13 +302,13 @@ public class PowerPlayBot extends Robot {
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                                new WaitCommand(100),
+                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/ReverseBlueLeftCreep"),
                         new TurnCommand(m_driveTrain, Math.toRadians(90)),
 //
-                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);}),
+                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 1);}),
 
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeftStack5"),
 
@@ -373,13 +373,13 @@ public class PowerPlayBot extends Robot {
 //
 ////START OF NEW
                         new ParallelCommandGroup(
-                                new TurnCommand(m_driveTrain, Math.toRadians(-180)),
-                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 3);})
+                                new TurnCommand(m_driveTrain, Math.toRadians(-182)),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight/RedRightStack1"),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-                                new WaitCommand(300),
+                                new WaitCommand(500),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.ACQUIRED);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight/RedRightStack2"),
@@ -398,19 +398,19 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight/ReverseBlueLeftCreep"),
                         new TurnCommand(m_driveTrain, Math.toRadians(-90)),
 //
-                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);}),
+                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 1);}),
 
                         new TrajectoryFollowerCommand(m_driveTrain, "RedRight/RedRightStack5"),
 
                         new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-                        new WaitCommand(300),
+                        new WaitCommand(500),
                         new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.ACQUIRED);}),
                         new WaitCommand(800),
 //
                         new ParkingCommand(m_driveTrain, m_visionSubsystem,
-                                "RedRight/RedRightStackParking0",
+                                "RedRight/RedRightStackParking2",
                                 "RedRight/RedRightStackParking1",
-                                "RedRight/RedRightStackParking2"
+                                "RedRight/RedRightStackParking0"
                         ),
                         new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);})
 //                        )
