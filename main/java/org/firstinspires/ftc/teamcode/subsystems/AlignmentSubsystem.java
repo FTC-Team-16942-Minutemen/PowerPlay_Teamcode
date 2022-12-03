@@ -30,6 +30,8 @@ public class AlignmentSubsystem extends SubsystemBase {
     public boolean getBeamBreakState(){return m_beamBreak.getState();}
     @Override
     public void periodic() {
+//        m_telemetry.addData("BB:", m_beamBreak.getState());
+//        m_telemetry.update();
     }
 
 }

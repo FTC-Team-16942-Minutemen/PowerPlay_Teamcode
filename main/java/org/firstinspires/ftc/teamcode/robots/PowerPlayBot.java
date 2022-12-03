@@ -283,7 +283,7 @@ public class PowerPlayBot extends Robot {
 //
 ////START OF NEW
                         new ParallelCommandGroup(
-                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                new TurnCommand(m_driveTrain, Math.toRadians(182)),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
                         ),
                         new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeftStack1"),
