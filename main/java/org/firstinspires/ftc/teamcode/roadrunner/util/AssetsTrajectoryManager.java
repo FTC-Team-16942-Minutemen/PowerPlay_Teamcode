@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.trajectory.config.TrajectoryGroupConfig;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,26 +26,55 @@ public class AssetsTrajectoryManager {
     public static @Nullable
     TrajectoryGroupConfig loadGroupConfig() {
         try {
-            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
-                    "trajectory/" + TrajectoryConfigManager.GROUP_FILENAME);
+            File initialFile = new File("/sdcard/auton/" + TrajectoryConfigManager.GROUP_FILENAME);
+            InputStream inputStream = new FileInputStream(initialFile);
+//            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
+//                    "trajectory/" + TrajectoryConfigManager.GROUP_FILENAME);
             return TrajectoryConfigManager.loadGroupConfig(inputStream);
         } catch (IOException e) {
             return null;
         }
     }
 
+    //PREVIOUS VERSION (prior to autonscriptparser)
+//    public static @Nullable
+//    TrajectoryGroupConfig loadGroupConfig() {
+//        try {
+//            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
+//                    "trajectory/" + TrajectoryConfigManager.GROUP_FILENAME);
+//            return TrajectoryConfigManager.loadGroupConfig(inputStream);
+//        } catch (IOException e) {
+//            return null;
+//        }
+//    }
+//
     /**
      * Loads a trajectory config with the given name.
      */
     public static @Nullable TrajectoryConfig loadConfig(String name) {
         try {
-            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
-                    "trajectory/" + name + ".yaml");
+            File initialFile = new File("/sdcard/auton/" + name + ".yaml");
+            InputStream inputStream = new FileInputStream(initialFile);
+//            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
+//                    "trajectory/" + name + ".yaml");
             return TrajectoryConfigManager.loadConfig(inputStream);
         } catch (IOException e) {
             return null;
         }
     }
+    //PREVIOUS version (prior to autonscriptparser)
+//    /**
+//     * Loads a trajectory config with the given name.
+//     */
+//    public static @Nullable TrajectoryConfig loadConfig(String name) {
+//        try {
+//            InputStream inputStream = AppUtil.getDefContext().getAssets().open(
+//                    "trajectory/" + name + ".yaml");
+//            return TrajectoryConfigManager.loadConfig(inputStream);
+//        } catch (IOException e) {
+//            return null;
+//        }
+//    }
 
     /**
      * Loads a trajectory builder with the given name.

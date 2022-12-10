@@ -48,12 +48,12 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static int junctionLow = 1200;
     public static int junctionGnd = 300;
 
-    public static int cone1Pos = 130;
-    public static int cone2Pos = 230;
-    public static int cone3Pos = 330;
-    public static int cone4Pos = 430;
+    public static int cone1Pos = 110;
+    public static int cone2Pos = 210;
+    public static int cone3Pos = 310;
+    public static int cone4Pos = 410;
 
-    public static int acquiredOffset = 400;
+    public static int acquiredOffset = 500;
     public static int scoringOffset = 650;
 
     private int m_position_index = 0;
