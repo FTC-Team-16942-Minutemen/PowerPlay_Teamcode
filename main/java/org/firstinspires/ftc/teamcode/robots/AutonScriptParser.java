@@ -89,7 +89,6 @@ public class AutonScriptParser {
                         inputCommandGroup.addCommands(newCommandGroup);
                         break;
                 }
-
             }
             else
             {
@@ -104,40 +103,40 @@ public class AutonScriptParser {
                         inputCommandGroup.addCommands(new TrajectoryFollowerCommand(m_driveSubsystem, parameter));
                         break;
                     case "ClawCommand":
-                        if(parameter.toLowerCase(Locale.ROOT) == "open")
+                        if(parameter.toLowerCase(Locale.ROOT).equals("open"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_clawSubsystem.open();}));
                         }
-                        else if(parameter.toLowerCase(Locale.ROOT) == "close")
+                        else if(parameter.toLowerCase(Locale.ROOT).equals("close"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_clawSubsystem.close();}));
                         }
                         break;
                     case "SlideTransitionCommand":
-                        if(parameter.toLowerCase(Locale.ROOT) == "scoring")
+                        if(parameter.toLowerCase(Locale.ROOT).equals("scoring"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}));
                         }
-                        else if(parameter.toLowerCase(Locale.ROOT) == "junction")
+                        else if(parameter.toLowerCase(Locale.ROOT).equals("junction"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);}));
                         }
-                        else if(parameter.toLowerCase(Locale.ROOT) == "ground")
+                        else if(parameter.toLowerCase(Locale.ROOT).equals("ground"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}));
                         }
-                        else if(parameter.toLowerCase(Locale.ROOT) == "acquired")
+                        else if(parameter.toLowerCase(Locale.ROOT).equals("acquired"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.ACQUIRED);}));
                         }
                         break;
                     case "SlideStateCommand":
                         params = parameter.split(" ");
-                        if(params[0].toLowerCase(Locale.ROOT) == "junction")
+                        if(params[0].toLowerCase(Locale.ROOT).equals("junction"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, Integer.getInteger(params[1]));}));
                         }
-                        else if(params[0].toLowerCase(Locale.ROOT) == "stack")
+                        else if(params[0].toLowerCase(Locale.ROOT).equals("stack"))
                         {
                             inputCommandGroup.addCommands(new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, Integer.getInteger(params[1]));}));
                         }

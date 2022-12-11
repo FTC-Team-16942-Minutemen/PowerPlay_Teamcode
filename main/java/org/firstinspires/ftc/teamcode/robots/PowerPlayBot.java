@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.AlignmentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurntableSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class PowerPlayBot extends Robot {
     VisionSubsystem m_visionSubsystem;
     ClawIntakeSubsystem m_clawIntakeSubsystem;
     AlignmentSubsystem m_AlignmentSubsystem;
+    TurntableSubsystem m_turntableSubsystem;
 
     Command m_command;
 //    DistanceTrigger m_distanceTrigger;
@@ -74,9 +76,10 @@ public class PowerPlayBot extends Robot {
 
         //Initialize Subsystems
         m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry, initialPose, allianceHeadingOffset);
-//        m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
+       m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
-//        m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
+        m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
+        m_turntableSubsystem = new TurntableSubsystem(m_hardwareMap, m_telemetry, 0.0);
 //        m_AlignmentSubsystem = new AlignmentSubsystem(m_hardwareMap, m_telemetry);
 
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
@@ -165,6 +168,14 @@ public class PowerPlayBot extends Robot {
                 ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 true));
 
+//        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
+//                        .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
+
+//        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+//                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceForward();}));
+//        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceBackwards();}));
+
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);}));
 
@@ -184,13 +195,13 @@ public class PowerPlayBot extends Robot {
                         new InstantCommand(() -> {m_linearSlideSubsystem.setBeaconCap();}),
                         new WaitCommand(1000),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.open();})));
-        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
-                        .whenHeld(new AlignmentCommand(m_AlignmentSubsystem, m_driveTrain,
-                                ()->m_gamePad1.getLeftY(),
-                                ()->-m_gamePad1.getLeftX(),
-                                ()->-m_gamePad1.getRightX(),
-                                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
-                                true));
+//        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
+//                        .whenHeld(new AlignmentCommand(m_AlignmentSubsystem, m_driveTrain,
+//                                ()->m_gamePad1.getLeftY(),
+//                                ()->-m_gamePad1.getLeftX(),
+//                                ()->-m_gamePad1.getRightX(),
+//                                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
+//                                true));
 
         m_gamePad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.setJunctionLevel(2);}));
@@ -273,7 +284,18 @@ public class PowerPlayBot extends Robot {
                 )
         );
     }
+
     private void setupBlueLeft_Auton()
+    {
+        try {
+            Command autonCommand = m_autonParser.read("/sdcard/auton/LeftAuton.json");
+            CommandScheduler.getInstance().schedule(autonCommand);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupBlueLeft_Auton_OLD()
     {
 //        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
 //        .whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
