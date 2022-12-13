@@ -168,13 +168,13 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         m_drive.updatePoseEstimate();
-//        wheelPositions = m_drive.getWheelPositions();
-//        m_telemetry.addData("0: ", wheelPositions.get(0));
-//        m_telemetry.addData("1: ", wheelPositions.get(1));
-//        m_telemetry.addData("2: ", wheelPositions.get(2));
-//        m_telemetry.addData("3: ", wheelPositions.get(3));
+        wheelPositions = m_drive.getWheelPositions();
+        m_telemetry.addData("0: ", wheelPositions.get(0));
+        m_telemetry.addData("1: ", wheelPositions.get(1));
+        m_telemetry.addData("2: ", wheelPositions.get(2));
+        m_telemetry.addData("3: ", wheelPositions.get(3));
 //        m_telemetry.addData("Potential Fields Enabled: ", m_isPotentialFieldEn);
-//        m_telemetry.update();
+        m_telemetry.update();
     }
 
 }
