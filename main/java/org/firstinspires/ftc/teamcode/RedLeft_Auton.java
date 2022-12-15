@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robots.Constants;
@@ -50,11 +51,12 @@ public class RedLeft_Auton extends LinearOpMode {
 
         //Initialize the robot's Pose
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
-        Pose2d initialPose = new Pose2d(new Vector2d( 40.50, -65.0), Math.toRadians(90.0));
+//        Pose2d initialPose = new Pose2d(new Vector2d( 40.50, -65.0), Math.toRadians(90.0));
+        Pose2d initialPose = new Pose2d(new Vector2d( 40, 65.0), Math.toRadians(-90.0));
 
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
-                Constants.OpModeType.RED_LEFT_AUTO,
+                Constants.OpModeType.BLUE_LEFT_AUTO,
                 hardwareMap,
                 telemetry,
                 gamepad1,
@@ -81,7 +83,7 @@ public class RedLeft_Auton extends LinearOpMode {
 
         //Store the last post of the robot to a static
         PoseStorage.currentPose = m_robot.getRobotPose();
-        PoseStorage.allianceHeadingOffset = 90.0; //red side
+        PoseStorage.allianceHeadingOffset = -90.0; //red side
         m_robot.reset();
     }
 }

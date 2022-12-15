@@ -1,12 +1,12 @@
 ---
 startPose:
-  x: 21.0
-  y: 9.0
+  x: 21.5
+  y: 8.0
   heading: -1.5707963267948966
 startTangent: 1.5707963267948966
 waypoints:
 - position:
-    x: 21.0
+    x: 21.5
     y: 12.0
   heading: -1.5707963267948966
   tangent: 1.5707963267948966

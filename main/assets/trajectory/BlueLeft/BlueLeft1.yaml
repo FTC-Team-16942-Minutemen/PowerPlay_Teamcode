@@ -1,6 +1,6 @@
 ---
 startPose:
-  x: 40.5
+  x: 40.0
   y: 65.0
   heading: -1.5707963267948966
 startTangent: 3.141592653589793

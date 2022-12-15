@@ -36,8 +36,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     //Both the left and right module is offset in x by -1.14in (left), -1.29in (right)
     //The "forward" module is offset in y by ~.55in  (make adjustments to the initializer)
 
-    public static double X_MULTIPLIER = 1.0;
-    public static double Y_MULTIPLIER = 1.0;
+    public static double X_MULTIPLIER = 1.01678;
+    public static double Y_MULTIPLIER = 1.0203;
 
     private Encoder leftEncoder, rightEncoder, frontEncoder;
 

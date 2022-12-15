@@ -47,7 +47,7 @@ public class PowerPlayBot extends Robot {
     LinearSlideSubsystem m_linearSlideSubsystem;
     VisionSubsystem m_visionSubsystem;
     ClawIntakeSubsystem m_clawIntakeSubsystem;
-    AlignmentSubsystem m_AlignmentSubsystem;
+//    AlignmentSubsystem m_AlignmentSubsystem;
     TurntableSubsystem m_turntableSubsystem;
 
     Command m_command;
@@ -55,7 +55,7 @@ public class PowerPlayBot extends Robot {
 //    TimedTrigger m_timedParkingTrigger;
     LeftTriggerTrigger m_leftTriggerTrigger;
 //    Timing.Timer m_timer;
-    AutonScriptParser m_autonParser;
+//    AutonScriptParser m_autonParser;
 
     public PowerPlayBot(Constants.OpModeType type,
                      HardwareMap hardwareMap,
@@ -76,7 +76,7 @@ public class PowerPlayBot extends Robot {
 
         //Initialize Subsystems
         m_driveTrain = new DriveSubsystem(m_hardwareMap, m_telemetry, initialPose, allianceHeadingOffset);
-       m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
+        m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
         m_turntableSubsystem = new TurntableSubsystem(m_hardwareMap, m_telemetry, 0.0);
@@ -89,10 +89,10 @@ public class PowerPlayBot extends Robot {
         //m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
 
         m_leftTriggerTrigger = new LeftTriggerTrigger(m_gamePad1, 0.05);
-        m_autonParser = new AutonScriptParser(m_driveTrain,
-                                            m_clawIntakeSubsystem,
-                                            m_visionSubsystem,
-                                            m_linearSlideSubsystem);
+//        m_autonParser = new AutonScriptParser(m_driveTrain,
+//                                            m_clawIntakeSubsystem,
+//                                            m_visionSubsystem,
+//                                            m_linearSlideSubsystem);
 
         setupOpMode(type);
     }
@@ -128,8 +128,7 @@ public class PowerPlayBot extends Robot {
         {
 
             m_telemetry.addData("Initialize", "BlueRight_Auton");
-//            setupBlueRight_Auton();
-            setupTestAuton();
+            setupBlueRight_Auton();
         }
         else if (type == Constants.OpModeType.BLUE_LEFT_AUTO)
         {
@@ -168,8 +167,8 @@ public class PowerPlayBot extends Robot {
                 ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 true));
 
-//        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
-//                        .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
+                        .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
 
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 //                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceForward();}));
@@ -232,16 +231,16 @@ public class PowerPlayBot extends Robot {
                 .whenPressed(new InstantCommand(() -> {m_driveTrain.correctHeadingOffset();}));
     }
 
-    private void setupTestAuton()
-    {
-        try {
-            Command autonCommand = m_autonParser.read("/sdcard/tmp/autontest.json");
-            CommandScheduler.getInstance().schedule(autonCommand);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    private void setupTestAuton()
+//    {
+//        try {
+//            Command autonCommand = m_autonParser.read("/sdcard/tmp/autontest.json");
+//            CommandScheduler.getInstance().schedule(autonCommand);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     private void setupBlueRight_Auton()
@@ -285,17 +284,17 @@ public class PowerPlayBot extends Robot {
         );
     }
 
-    private void setupBlueLeft_Auton()
-    {
-        try {
-            Command autonCommand = m_autonParser.read("/sdcard/auton/LeftAuton.json");
-            CommandScheduler.getInstance().schedule(autonCommand);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void setupBlueLeft_AutonNEW()
+//    {
+//        try {
+//            Command autonCommand = m_autonParser.read("/sdcard/auton/LeftAuton.json");
+//            CommandScheduler.getInstance().schedule(autonCommand);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void setupBlueLeft_Auton_OLD()
+    private void setupBlueLeft_Auton()
     {
 //        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
 //        .whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
@@ -318,7 +317,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(800),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
-                                new WaitCommand(300),
+//                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
@@ -344,7 +343,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain,"BlueLeft/BlueLeftCreep2"),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
-                                new WaitCommand(300),
+//                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(300),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
@@ -408,7 +407,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(800),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
-                                new WaitCommand(300),
+//                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})
@@ -434,7 +433,7 @@ public class PowerPlayBot extends Robot {
                         new TrajectoryFollowerCommand(m_driveTrain,"RedRight/RedRightCreep2"),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.SCORING);}),
-                                new WaitCommand(300),
+//                                new WaitCommand(300),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                 new WaitCommand(100),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);})

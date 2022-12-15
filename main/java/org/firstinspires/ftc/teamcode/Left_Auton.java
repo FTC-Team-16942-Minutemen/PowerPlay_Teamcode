@@ -31,12 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.Robot;
-import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robots.Constants;
 import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
@@ -45,21 +41,20 @@ import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 Autonomous OpMode script using Command-based Robot
  */
 
-@Autonomous(name="BlueRight_Auton", group="Autonomous")
+@Autonomous(name="Left_Auton", group="Autonomous")
 //@Disabled
-public class BlueRight_Auton extends LinearOpMode {
+public class Left_Auton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
         //Initialize the robot's Pose
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
-//        Pose2d initialPose = new Pose2d(new Vector2d( -40.50, 65.0), Math.toRadians(-90.0));
-        Pose2d initialPose = new Pose2d(new Vector2d( -30, -65.0), Math.toRadians(90.0));
+        Pose2d initialPose = new Pose2d(new Vector2d( 40, 65.0), Math.toRadians(-90.0));
 
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
-                Constants.OpModeType.RED_RIGHT_AUTO,
+                Constants.OpModeType.BLUE_LEFT_AUTO,
                 hardwareMap,
                 telemetry,
                 gamepad1,
@@ -86,8 +81,7 @@ public class BlueRight_Auton extends LinearOpMode {
 
         //Store the last post of the robot to a static
         PoseStorage.currentPose = m_robot.getRobotPose();
-//        PoseStorage.allianceHeadingOffset = -90.0; //blue side
-        PoseStorage.allianceHeadingOffset = 90.0; //red side
+        PoseStorage.allianceHeadingOffset = -90.0; //blue side
         m_robot.reset();
     }
 }
