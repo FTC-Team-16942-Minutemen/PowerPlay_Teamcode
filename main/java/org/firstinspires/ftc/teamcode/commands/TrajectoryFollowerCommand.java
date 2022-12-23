@@ -21,8 +21,8 @@ public class TrajectoryFollowerCommand extends CommandBase {
     @Override
     public void initialize()
     {
-        Pose2d initialPose = m_trajectory.get(0.0);
-        m_driveSubsystem.setPoseEstimate(initialPose);
+//        Pose2d initialPose = m_trajectory.get(0.0);
+//        m_driveSubsystem.setPoseEstimate(initialPose);
         m_driveSubsystem.followTrajectoryAsync(m_trajectory);
     }
 
