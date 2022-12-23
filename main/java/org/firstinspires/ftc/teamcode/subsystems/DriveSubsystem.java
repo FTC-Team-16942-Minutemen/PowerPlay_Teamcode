@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,6 +41,8 @@ public class DriveSubsystem extends SubsystemBase {
     double PF_SCALE = 1.0;
     double THROTTLEMINLEVEL = 0.4;
     boolean m_isPotentialFieldEn = false;
+    double extHeading;
+    Pose2d pose;
     List<Double> wheelPositions;
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose, double allianceHeadingOffset)
@@ -165,10 +168,20 @@ public class DriveSubsystem extends SubsystemBase {
         m_drive.updatePoseEstimate();
     }
 
+//    public void IMUCorrectedHeading(){
+//        pose = getPoseEstimate();
+//        extHeading = Angle.norm(m_drive.getExternalHeading()- pose.getHeading());
+//        pose = new Pose2d(getPoseEstimate().vec(), extHeading);
+//        setPoseEstimate(pose);
+//    }
+
     @Override
     public void periodic() {
         m_drive.updatePoseEstimate();
-
+    //    update();
+//        IMUCorrectedHeading();
+//        m_telemetry.addData("Real Heading", m_drive.getRawExternalHeading());
+//        m_telemetry.update();
 //        wheelPositions = m_drive.getWheelPositions();
 //        m_telemetry.addData("0: ", wheelPositions.get(0));
 //        m_telemetry.addData("1: ", wheelPositions.get(1));

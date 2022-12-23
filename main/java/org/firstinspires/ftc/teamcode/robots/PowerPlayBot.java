@@ -303,22 +303,37 @@ public class PowerPlayBot extends Robot {
 //        );
 //
 //    }
-    private void setupBlueLeft_Auton()
-    {
 //        m_timedParkingTrigger.toggleWhenActive(new InstantCommand(() -> {m_linearSlideSubsystem.step(1);}));
 //        .whenInactive(new InstantCommand(() -> {m_linearSlideSubsystem.step(-1);}));
 //                m_command.schedule();
+    private void setupBlueLeft_Auton()
+    {
         CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup(
-                        new SequentialCommandGroup(
-                                new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-                                new WaitCommand(300)
-                        ),
-//
+               new SequentialCommandGroup(
+//                       new SequentialCommandGroup(
+//                                new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+//                                new WaitCommand(300)
+//                        ),
+                       new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeftPrimer")
+//                       new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
+//                       new WaitCommand(500),
+//                     //  new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/PrimerCreep"),
+//                       new WaitCommand(500),
+//                       new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
 
-                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeft1"),
-                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
-                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
+               ));
+//
+//        CommandScheduler.getInstance().schedule(
+//                new SequentialCommandGroup(
+//                        new SequentialCommandGroup(
+//                                new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+//                                new WaitCommand(300)
+//                        ),
+////
+//
+//                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeft1"),
+//                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
+//                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
 //                        new TrajectoryFollowerCommand(m_driveTrain, "BlueLeft/BlueLeft2"),
 //                        new ParallelCommandGroup(
 //                            //    new TurnCommand(m_driveTrain, Math.toRadians(-90.0)),
@@ -378,8 +393,8 @@ public class PowerPlayBot extends Robot {
 //                        ),
 //                        new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);})
 
-                )
-        );
+//                )
+//        );
     }
     private void setupRedRight_Auton()
     {

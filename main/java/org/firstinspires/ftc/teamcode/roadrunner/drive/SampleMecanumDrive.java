@@ -27,12 +27,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.roadrunner.util.Encoder;
 import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 0, 0.5);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 0, 1);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(12.0, 2, 1);
 
     public static double LATERAL_MULTIPLIER = 1;
@@ -82,11 +84,12 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private Telemetry m_telemetry;
 
+
     public SampleMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.1, 0.1 , Math.toRadians(0.5)), 1.0);
+                new Pose2d(0.1, 0.1 , Math.toRadians(0.2 )), 1.0);
 
 
         m_telemetry = telemetry;
@@ -230,7 +233,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void update() {
-        updatePoseEstimate(); //Add this back in if running RR tuning scripts
+    //    updatePoseEstimate();//Add this back in if running RR tuning scripts
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
