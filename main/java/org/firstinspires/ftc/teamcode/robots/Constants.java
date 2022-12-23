@@ -9,6 +9,7 @@ public final class Constants
         BLUE_LEFT_AUTO,
         RED_RIGHT_AUTO,
         RED_LEFT_AUTO,
+        BLUE_RIGHT_BETTER_AUTON,
     }
 
     public enum LinearSlideState {

@@ -58,8 +58,8 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12.0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 0, 0.5);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12.0, 2, 0.5);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -86,7 +86,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(1.0)), 0.5);
 
 
         m_telemetry = telemetry;
@@ -230,7 +230,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void update() {
-    //    updatePoseEstimate(); //Add this back in if running RR tuning scripts
+        updatePoseEstimate(); //Add this back in if running RR tuning scripts
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
@@ -354,6 +354,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         return imu.getAngularOrientation().firstAngle;
     }
 
+//    public Pose2d getIMUPose2d(){new Pose2d()}
     @Override
     public Double getExternalHeadingVelocity() {
         // To work around an SDK bug, use -zRotationRate in place of xRotationRate
