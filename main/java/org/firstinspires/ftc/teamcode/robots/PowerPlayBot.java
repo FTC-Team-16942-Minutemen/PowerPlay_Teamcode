@@ -324,11 +324,10 @@ public class PowerPlayBot extends Robot {
                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))
                        ),
                        new SequentialCommandGroup(
-                               new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                               new WaitCommand(300)
+                               new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
+//                               new WaitCommand(300)
                        ),
                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left2"),
-                       new WaitCommand(50),
                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 3);}),
                        new TurnCommand(m_driveTrain, Math.toRadians(-178)),
                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left3"),
@@ -354,14 +353,14 @@ public class PowerPlayBot extends Robot {
                                                     new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
                                                     )
                                                 ),
-                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                        new TurnCommand(m_driveTrain, Math.toRadians(-178)),
                                         new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
 
                                         new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
                                         new WaitCommand(300),
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
                                         new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
-                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                        new TurnCommand(m_driveTrain, Math.toRadians(178)),
 
                                         new ParallelCommandGroup(
                                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
@@ -379,14 +378,14 @@ public class PowerPlayBot extends Robot {
                                                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 1);})
                                                         )
                                                 ),
-                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                                new TurnCommand(m_driveTrain, Math.toRadians(-178)),
                                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
 
                                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
                                                 new WaitCommand(300),
                                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
                                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
-                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                                new TurnCommand(m_driveTrain, Math.toRadians(178)),
 
                                                 new ParallelCommandGroup(
                                                         new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
