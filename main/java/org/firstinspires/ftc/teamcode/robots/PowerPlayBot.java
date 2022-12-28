@@ -310,6 +310,9 @@ public class PowerPlayBot extends Robot {
     {
         CommandScheduler.getInstance().schedule(
                new SequentialCommandGroup(
+//
+
+
                        new SequentialCommandGroup(
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
                                 new WaitCommand(300)
@@ -324,78 +327,75 @@ public class PowerPlayBot extends Robot {
                                new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                new WaitCommand(300)
                        ),
+                       new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left2"),
+                       new WaitCommand(50),
+                       new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 3);}),
+                       new TurnCommand(m_driveTrain, Math.toRadians(-178)),
+                       new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left3"),
+                       new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+                       new WaitCommand(300),
+                       new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
+                       new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
+                       new TurnCommand(m_driveTrain, Math.toRadians(178)),
                        new ParallelCommandGroup(
-                              new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left2"),
-                               new TurnCommand(m_driveTrain, Math.toRadians(180)),
-                               new SequentialCommandGroup(
-                                       new WaitCommand(700),
-                                       new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 3);})
-                               )
-                       )
-//                    new SequentialCommandGroup(
-//                            new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left3"),
-//                            new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-//                            new WaitCommand(300),
-//                            new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
-//                            new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
-//                            new TurnCommand(m_driveTrain, Math.toRadians(180))
-//                            ),
-//                            new ParallelCommandGroup(
-//                                    new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
-//                                    new SequentialCommandGroup(
-//                                            new WaitCommand(500),
-//                                            new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
-//                                                     )
-//                                        ),
-//                            new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
+                                    new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
+                                    new SequentialCommandGroup(
+                                            new WaitCommand(500),
+                                            new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
+                                                     )
+                                        ),
+                      new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                     //repeat starts here
-//                                new SequentialCommandGroup(
-//                                        new ParallelCommandGroup(
-//                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter"),
-//                                                new SequentialCommandGroup(
-//                                                    new WaitCommand(500),
-//                                                    new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
-//                                                    )
-//                                                ),
-//                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
-//                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
-//
-//                                        new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-//                                        new WaitCommand(300),
-//                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
-//                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
-//                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
-//
-//                                        new ParallelCommandGroup(
-//                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
-//                                                new SequentialCommandGroup(
-//                                                        new WaitCommand(500),
-//                                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))),
-//                                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();}))
-//                                new SequentialCommandGroup(
-//                                                new ParallelCommandGroup(
-//                                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter"),
-//                                                        new SequentialCommandGroup(
-//                                                                new WaitCommand(500),
-//                                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 1);})
-//                                                        )
-//                                                ),
-//                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
-//                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
-//
-//                                                new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
-//                                                new WaitCommand(300),
-//                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
-//                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
-//                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
-//
-//                                                new ParallelCommandGroup(
-//                                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
-//                                                        new SequentialCommandGroup(
-//                                                                new WaitCommand(500),
-//                                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))
-//                                                ),
-//                                                new InstantCommand(() -> {m_clawIntakeSubsystem.open();}))
+                                new SequentialCommandGroup(
+                                        new ParallelCommandGroup(
+                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter"),
+                                                new SequentialCommandGroup(
+                                                    new WaitCommand(500),
+                                                    new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 2);})
+                                                    )
+                                                ),
+                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
+
+                                        new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+                                        new WaitCommand(300),
+                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
+                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
+                                        new TurnCommand(m_driveTrain, Math.toRadians(180)),
+
+                                        new ParallelCommandGroup(
+                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
+                                                new SequentialCommandGroup(
+                                                        new WaitCommand(500),
+                                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))),
+                                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();})),
+
+                                //new cycle
+                                new SequentialCommandGroup(
+                                                new ParallelCommandGroup(
+                                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter"),
+                                                        new SequentialCommandGroup(
+                                                                new WaitCommand(500),
+                                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 1);})
+                                                        )
+                                                ),
+                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
+                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeAquire"),
+
+                                                new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+                                                new WaitCommand(300),
+                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 0);}),
+                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeBack"),
+                                                new TurnCommand(m_driveTrain, Math.toRadians(180)),
+
+                                                new ParallelCommandGroup(
+                                                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler"),
+                                                        new SequentialCommandGroup(
+                                                                new WaitCommand(500),
+                                                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))
+                                                ),
+                                                new InstantCommand(() -> {m_clawIntakeSubsystem.open();}))
+//        // new cycle
 //        new SequentialCommandGroup(
 //                new ParallelCommandGroup(
 //                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter"),
@@ -419,9 +419,9 @@ public class PowerPlayBot extends Robot {
 //                                new WaitCommand(500),
 //                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}))
 //                ),
-          //      new InstantCommand(() -> {m_clawIntakeSubsystem.open();}))
-                                        )
-        );
+//                new InstantCommand(() -> {m_clawIntakeSubsystem.open();}))
+
+               ));
 
 ///
     }
@@ -513,7 +513,7 @@ public class PowerPlayBot extends Robot {
 //
 
                         new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left1"),
-                        new TrajectoryFollowerCommand(m_driveTrain, "RedRight/RedRight2"),
+                        new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Left2"),
                         new ParallelCommandGroup(
                                 new TurnCommand(m_driveTrain, Math.toRadians(90.0)),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})

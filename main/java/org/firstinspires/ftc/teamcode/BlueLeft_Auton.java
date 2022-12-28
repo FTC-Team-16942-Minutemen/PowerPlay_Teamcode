@@ -53,7 +53,7 @@ public class BlueLeft_Auton extends LinearOpMode {
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
        // Pose2d initialPose = new Pose2d(new Vector2d( 40.5, 65.0), Math.toRadians(-90.0));
 //        Pose2d initialPose = new Pose2d(new Vector2d( 36, 65.0), Math.toRadians(180.0));
-        Pose2d initialPose = new Pose2d(new Vector2d( 41, 63.5), Math.toRadians(180.0));
+        Pose2d initialPose = new Pose2d(new Vector2d( 41, 62.7), Math.toRadians(180.0));
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.BLUE_LEFT_AUTO,
@@ -72,7 +72,7 @@ public class BlueLeft_Auton extends LinearOpMode {
 //        resetRuntime();
 
         //Disable the parking detection pipeline and start the parking timer countdown
-//        m_robot.disableVision();
+        m_robot.disableVision();
 
         // Run the robot until the end of the match (or until the driver presses STOP)
         while (opModeIsActive() && !isStopRequested())
