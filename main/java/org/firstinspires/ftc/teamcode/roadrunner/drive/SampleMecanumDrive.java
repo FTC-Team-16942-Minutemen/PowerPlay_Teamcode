@@ -60,10 +60,10 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 0, 1);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12.0, 2, 1);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10.0, 1, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(11.0, 1, 0);
 
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double LATERAL_MULTIPLIER = 1.0;
 
     public static double VX_WEIGHT = 1.0;
     public static double VY_WEIGHT = 1.0;
@@ -89,7 +89,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.1, 0.1 , Math.toRadians(0.2 )), 1.0);
+                new Pose2d(0.1, 0.1 , Math.toRadians(0.2)), 1.0);
 
 
         m_telemetry = telemetry;
@@ -167,8 +167,8 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-//        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+//        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -233,8 +233,18 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public void update() {
-    //    updatePoseEstimate();//Add this back in if running RR tuning scripts
+//        updatePoseEstimate();//Add this back in if running RR tuning scripts
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
+//        DriveSignal signal = trajectorySequenceRunner.update(new Pose2d(currentPose.getX(), currentPose.getY(), 180.0), getPoseVelocity());
+
+//        Pose2d poseVel = getPoseVelocity();
+//        m_telemetry.addData("posVel X: ", poseVel.getX());
+//        m_telemetry.addData("posVel Y: ", poseVel.getY());
+//        m_telemetry.addData("posVel heading: ", poseVel.getHeading());
+////        m_telemetry.addData("signal X: ", signal.getVel().getX());
+////        m_telemetry.addData("signal Y: ", signal.getVel().getY());
+////        m_telemetry.addData("signal heading: ", signal.getVel().getHeading());
+//        m_telemetry.update();
         if (signal != null) setDriveSignal(signal);
     }
 
@@ -343,7 +353,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 //        m_telemetry.addData("Power1:",v1/maxVal);
 //        m_telemetry.addData("Power2:",v2/maxVal);
 //        m_telemetry.addData("Power3:",v3/maxVal);
-
+//
 //        m_telemetry.update();
 
         leftFront.setPower(v/maxVal);
@@ -361,12 +371,12 @@ public class SampleMecanumDrive extends MecanumDrive {
     @Override
     public Double getExternalHeadingVelocity() {
         // To work around an SDK bug, use -zRotationRate in place of xRotationRate
-        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as 
-        // expected). This bug does NOT affect orientation. 
+        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
+        // expected). This bug does NOT affect orientation.
         //
         // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
 //        return (double) imu.getAngularVelocity().zRotationRate;
-        return (double) imu.getAngularVelocity().yRotationRate;
+          return (double) imu.getAngularVelocity().yRotationRate;
         //comment this out for 3 wheel
     }
 

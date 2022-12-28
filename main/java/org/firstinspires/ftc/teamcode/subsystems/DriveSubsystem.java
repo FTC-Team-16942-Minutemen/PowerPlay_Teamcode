@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A subsystem that uses the {@link SampleMecanumDrive} class.
@@ -44,6 +46,9 @@ public class DriveSubsystem extends SubsystemBase {
     double extHeading;
     Pose2d pose;
     List<Double> wheelPositions;
+//    Timing.Timer m_timer;
+//    Long prev_time;
+
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose2d initialPose, double allianceHeadingOffset)
     {
@@ -52,6 +57,9 @@ public class DriveSubsystem extends SubsystemBase {
         m_drive=new SampleMecanumDrive(m_hardwareMap, m_telemetry);
         m_drive.setPoseEstimate(initialPose);
         m_allianceHeadingOffset = allianceHeadingOffset;
+//        m_timer = new Timing.Timer(300, TimeUnit.MILLISECONDS);
+//        m_timer.start();
+//        prev_time = m_timer.elapsedTime();
     }
 
     public void drive(double leftX, double leftY, double rightX, double throttle, boolean isFieldCentric)
@@ -135,7 +143,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void update()
     {
+//        m_telemetry.addData("timestep: ", m_timer.elapsedTime() - prev_time);
+//        m_telemetry.update();
         m_drive.update();
+//        prev_time = m_timer.elapsedTime();
     }
 
     public boolean isBusy() {
@@ -175,8 +186,11 @@ public class DriveSubsystem extends SubsystemBase {
 //        setPoseEstimate(pose);
 //    }
 
+
     @Override
     public void periodic() {
+//        m_telemetry.addData("robotPosePoseEstimate", getPoseEstimate());
+//        m_telemetry.update();
         m_drive.updatePoseEstimate();
     //    update();
 //        IMUCorrectedHeading();

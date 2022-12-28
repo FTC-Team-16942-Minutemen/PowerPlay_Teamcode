@@ -49,8 +49,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {
         super(Arrays.asList(
-                new Pose2d(-1.38, LATERAL_DISTANCE / 2, 0), // left was 1.14 was -1.125
-                new Pose2d(-1.125, -LATERAL_DISTANCE / 2, 0), // right was 1.29   was -1.38
+                new Pose2d(-1.125, LATERAL_DISTANCE / 2, 0), // left was 1.14 was -1.125
+                new Pose2d(-1.38, -LATERAL_DISTANCE / 2, 0), // right was 1.29   was -1.38
                 new Pose2d(FORWARD_OFFSET, -0.55, Math.toRadians(90)) // front
         ));
 

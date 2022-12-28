@@ -45,8 +45,8 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.88976378; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 8.87;//14.1732283; // in 12.75
-
+//    public static double TRACK_WIDTH = 8.87;//14.1732283; // in 12.75
+    public static double TRACK_WIDTH = 14.1732283;
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
      * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
@@ -65,8 +65,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 30;
-    public static double MAX_ACCEL = 30;
+    public static double MAX_VEL = 10;
+    public static double MAX_ACCEL = 15;
     public static double MAX_ANG_VEL = Math.toRadians(180);
     public static double MAX_ANG_ACCEL = Math.toRadians(180);
 

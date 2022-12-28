@@ -31,10 +31,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.roadrunner.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.robots.Constants;
 import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 
@@ -42,28 +46,40 @@ import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
 Autonomous OpMode script using Command-based Robot
  */
 
-@Autonomous(name="BlueLeft_Auton", group="Autonomous")
+@Autonomous(name="RRTest_Auton", group="Autonomous")
 //@Disabled
-public class BlueLeft_Auton extends LinearOpMode {
+public class RRTest_Auton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
         //Initialize the robot's Pose
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
-       // Pose2d initialPose = new Pose2d(new Vector2d( 40.5, 65.0), Math.toRadians(-90.0));
-//        Pose2d initialPose = new Pose2d(new Vector2d( 36, 65.0), Math.toRadians(180.0));
-        Pose2d initialPose = new Pose2d(new Vector2d( 41, 63.5), Math.toRadians(180.0));
-        //Instantiate the robot
-        PowerPlayBot m_robot = new PowerPlayBot(
-                Constants.OpModeType.BLUE_LEFT_AUTO,
-                hardwareMap,
-                telemetry,
-                gamepad1,
-                gamepad2,
-                initialPose, 0.0);
+        Pose2d initialPose = new Pose2d(new Vector2d( 36, 65.0), Math.toRadians(180.0));
+        drive.setPoseEstimate(initialPose);
 
-        getRuntime();
+        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(initialPose)
+                .setTangent(Math.toRadians(270))
+                .splineToConstantHeading(
+                        new Vector2d(36.0, 0.0),
+                        Math.toRadians(180.0),
+                        SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                .setTangent(Math.toRadians(270))
+                .build();
+
+        Trajectory testTrajectory = AssetsTrajectoryManager.load("BlueLeft/BlueLeftPrimer");
+        Trajectory testTrajectoryRev = AssetsTrajectoryManager.load("BlueLeft/BlueLeftPrimerReverse");
+
+        TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(testTrajectory.start())
+                .addTrajectory(testTrajectory)
+                .addTrajectory(testTrajectoryRev)
+                .addTrajectory(testTrajectory)
+                .addTrajectory(testTrajectoryRev)
+                .build();
+
+        drive.setPoseEstimate(initialPose);
 
         //Wait for driver to press PLAY
         waitForStart();
@@ -77,13 +93,14 @@ public class BlueLeft_Auton extends LinearOpMode {
         // Run the robot until the end of the match (or until the driver presses STOP)
         while (opModeIsActive() && !isStopRequested())
         {
+//            drive.followTrajectoryAsync(testTrajectory);
+            drive.followTrajectorySequence(trajSeq2);
 //            m_robot.setCurrentTime(getRuntime());
-            m_robot.run();
         }
 
         //Store the last post of the robot to a static
-        PoseStorage.currentPose = m_robot.getRobotPose();
-        PoseStorage.allianceHeadingOffset = -90.0; //blue side
-        m_robot.reset();
+//        PoseStorage.currentPose = m_robot.getRobotPose();
+//        PoseStorage.allianceHeadingOffset = 90.0; //red side
+
     }
 }
