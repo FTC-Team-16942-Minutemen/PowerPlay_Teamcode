@@ -1,6 +1,6 @@
 ---
-maxVel: 40.0
-maxAccel: 29.0
+maxVel: 25.0
+maxAccel: 20.0
 maxAngVel: 3.141592653589793
 maxAngAccel: 3.141592653589793
 robotLength: 14.0

@@ -12,10 +12,10 @@ waypoints:
   tangent: 3.141592653589793
   interpolationType: "SPLINE"
 - position:
-    x: 18.0
-    y: 6.0
+    x: 20.0
+    y: 4.0
   heading: 0.0
-  tangent: 0.0
+  tangent: -0.6981317007977318
   interpolationType: "CONSTANT"
 resolution: 0.25
 version: 1
