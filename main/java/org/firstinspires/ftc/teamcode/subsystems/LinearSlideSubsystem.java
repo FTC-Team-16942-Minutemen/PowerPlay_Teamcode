@@ -234,6 +234,8 @@ public class LinearSlideSubsystem extends SubsystemBase {
         return m_LinearSlideMotor.getPower();
     }
 
+    public double getElevatorPosition(){return m_LinearSlideMotor.getCurrentPosition();}
+
     public void lowerSlide() {
         m_LinearSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         m_targetPower = -0.4;

@@ -25,20 +25,18 @@ public class TurntableSubsystem extends SubsystemBase {
 
 
     public void faceForward() {
-        m_position = 1.0;
-    }
-
-    public void faceBackwards() {
         m_position = 0.0;
     }
 
+    public void faceBackwards() {
+        m_position = 1.0;
+    }
+
+    public double getTurntablePosition(){return m_position;}
     @Override
     public void periodic() {
         m_turntableServo.setPosition(m_position);
         m_turntableServo.scaleRange(minScale, maxScale);
-//        }
-//        m_telemetry.addData("Servo Pos: ", m_clawServo.getPosition());
-//        m_telemetry.addData("Set Position: ", m_position);
-//        m_telemetry.update();
+
     }
 }
