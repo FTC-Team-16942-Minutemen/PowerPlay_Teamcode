@@ -63,6 +63,36 @@ public class AssetsTrajectoryManager {
 //        }
 //    }
     //PREVIOUS version (prior to autonscriptparser)
+    public static @Nullable TrajectoryBuilder loadBuilder(String name, double maxVel, double maxAccel) {
+        TrajectoryGroupConfig groupConfig = loadGroupConfig();
+        TrajectoryGroupConfig modifiedGroupConfig = groupConfig.copy(maxVel,
+                maxAccel,
+                groupConfig.getMaxAngVel(),
+                groupConfig.getMaxAngAccel(),
+                groupConfig.getRobotLength(),
+                groupConfig.getRobotWidth(),
+                groupConfig.getDriveType(),
+                groupConfig.getTrackWidth(),
+                groupConfig.getWheelBase(),
+                groupConfig.getLateralMultiplier()
+        );
+        TrajectoryConfig config = loadConfig(name);
+        if (groupConfig == null || config == null) {
+            return null;
+        }
+        return config.toTrajectoryBuilder(modifiedGroupConfig);
+    }
+
+    /**
+     * Loads a trajectory with the given name.
+     */
+    public static @Nullable Trajectory load(String name, double maxVel, double maxAccel) {
+        TrajectoryBuilder builder = loadBuilder(name, maxVel, maxAccel);
+        if (builder == null) {
+            return null;
+        }
+        return builder.build();
+    }
     /**
      * Loads a trajectory config with the given name.
      */

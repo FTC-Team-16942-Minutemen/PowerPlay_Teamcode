@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.commands.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.TurntableTurnCommand;
 import org.firstinspires.ftc.teamcode.robots.triggers.LeftTriggerTrigger;
+import org.firstinspires.ftc.teamcode.robots.triggers.TurntableTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.AlignmentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -51,7 +52,7 @@ public class PowerPlayBot extends Robot {
     ClawIntakeSubsystem m_clawIntakeSubsystem;
 //    AlignmentSubsystem m_AlignmentSubsystem;
     TurntableSubsystem m_turntableSubsystem;
-
+    TurntableTrigger m_turntableTrigger;
     Command m_command;
 //    DistanceTrigger m_distanceTrigger;
 //    TimedTrigger m_timedParkingTrigger;
@@ -89,7 +90,7 @@ public class PowerPlayBot extends Robot {
 //        m_distanceTrigger = new DistanceTrigger(m_DistanceSensorSubsystem, 8);
         //m_timer = new Timing.Timer(29);
         //m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
-
+        m_turntableTrigger = new TurntableTrigger(m_linearSlideSubsystem);
         m_leftTriggerTrigger = new LeftTriggerTrigger(m_gamePad1, 0.05);
 //        m_autonParser = new AutonScriptParser(m_driveTrain,
 //                                            m_clawIntakeSubsystem,
@@ -161,9 +162,12 @@ public class PowerPlayBot extends Robot {
                             new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
                         )
                 );
-
+        m_turntableTrigger.whileActiveOnce(
+                new InstantCommand(()-> {m_turntableSubsystem.faceBackwards();})).whenInactive(
+                        new InstantCommand(()-> {m_turntableSubsystem.faceForward();}));
 //        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
 //                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
+
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
