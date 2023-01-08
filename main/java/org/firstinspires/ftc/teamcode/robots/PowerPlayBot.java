@@ -90,7 +90,7 @@ public class PowerPlayBot extends Robot {
         //m_timer = new Timing.Timer(29);
         //m_timedParkingTrigger = new TimedTrigger(0.0,25.0, m_telemetry);
 
-        m_leftTriggerTrigger = new LeftTriggerTrigger(m_linearSlideSubsystem, 0.05);
+        m_leftTriggerTrigger = new LeftTriggerTrigger(m_gamePad1, 0.05);
 //        m_autonParser = new AutonScriptParser(m_driveTrain,
 //                                            m_clawIntakeSubsystem,
 //                                            m_visionSubsystem,
@@ -153,17 +153,17 @@ public class PowerPlayBot extends Robot {
 
     private void setupTeleOp()
     {
-//        m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
-//                m_linearSlideSubsystem,
-//                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
-//                .whenInactive(new SequentialCommandGroup(
-//                            new WaitCommand(400),
-//                            new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
-//                        )
-//                );
+        m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
+                m_linearSlideSubsystem,
+                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
+                .whenInactive(new SequentialCommandGroup(
+                            new WaitCommand(400),
+                            new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
+                        )
+                );
 
-        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
-                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
+//        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
+//                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
@@ -405,7 +405,7 @@ public class PowerPlayBot extends Robot {
                                                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);})
                                                         )
                                                 ),
-                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ToPole",30,30),
+                                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ToPole"),
                                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
                                                 new WaitCommand(300),
                                                 //repeat starts here

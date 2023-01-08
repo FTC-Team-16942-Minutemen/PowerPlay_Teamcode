@@ -10,11 +10,11 @@ import java.util.function.BooleanSupplier;
 public class TurntableTurnCommand extends CommandBase{
     TurntableSubsystem m_turntableSubsystem;
     GamepadEx gamepadEx;
-    BooleanSupplier BButtonSupplier;
+    BooleanSupplier m_BButtonSupplier;
 
-    public TurntableTurnCommand(TurntableSubsystem turntableSubsystem, BooleanSupplier BButtonSupplier) {
+    public TurntableTurnCommand(TurntableSubsystem turntableSubsystem, BooleanSupplier ButtonBSupplier) {
         turntableSubsystem = m_turntableSubsystem;
-        BButtonSupplier = BButtonSupplier;
+        ButtonBSupplier = m_BButtonSupplier;
     }
     @Override
     public void initialize(){

@@ -8,19 +8,19 @@ import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
 
 public class LeftTriggerTrigger extends Trigger {
 
-    LinearSlideSubsystem m_linearSlideSubsystem;
+    GamepadEx m_gamepad;
     double m_inputThreshold;
 
-    public LeftTriggerTrigger(LinearSlideSubsystem linearSlideSubsystem, double inputThreshold)
+    public LeftTriggerTrigger(GamepadEx gamepad, double inputThreshold)
     {
-        m_linearSlideSubsystem = linearSlideSubsystem;
+        m_gamepad = gamepad;
         m_inputThreshold = inputThreshold;
     }
 
     @Override
     public boolean get()
     {
-        if(m_linearSlideSubsystem.getElevatorPosition() > m_inputThreshold)
+        if(m_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > m_inputThreshold)
         {
             return true;
         }

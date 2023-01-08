@@ -19,12 +19,6 @@ public class TrajectoryFollowerCommand extends CommandBase {
         addRequirements(driveSubsystem);
     }
 
-    public TrajectoryFollowerCommand(DriveSubsystem driveSubsystem, String trajectoryName, double maxVel, double maxAccel)
-    {
-        m_driveSubsystem = driveSubsystem;
-        m_trajectory = AssetsTrajectoryManager.load(trajectoryName, maxVel, maxAccel);
-        addRequirements(driveSubsystem);
-    }
 
     @Override
     public void initialize()
