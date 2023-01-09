@@ -1,23 +1,25 @@
 package org.firstinspires.ftc.teamcode.robots.triggers;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.button.Trigger;
 
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TurntableSubsystem;
 
+@Config
 public class TurntableTrigger extends Trigger {
-    LinearSlideSubsystem m_linearslideSubsystem;
-    
+    LinearSlideSubsystem m_linearSlideSubsystem;
+    public static double positionThreshold = 2000;
 
     public TurntableTrigger(LinearSlideSubsystem linearSlideSubsystem){
-        linearSlideSubsystem = m_linearslideSubsystem;
+        m_linearSlideSubsystem = linearSlideSubsystem;
     }
     @Override
     public boolean get(){
-        if(m_linearslideSubsystem.getElevatorPosition() > 1000){
+        if(m_linearSlideSubsystem.getElevatorPosition() > positionThreshold){
             return true;
         } else {
             return false;
         }
     }
+
 }

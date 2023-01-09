@@ -82,7 +82,7 @@ public class PowerPlayBot extends Robot {
         m_linearSlideSubsystem = new LinearSlideSubsystem(m_hardwareMap, m_telemetry);
         m_visionSubsystem = new VisionSubsystem(m_hardwareMap, m_telemetry);
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
-        m_turntableSubsystem = new TurntableSubsystem(m_hardwareMap, m_telemetry, 0.0);
+        m_turntableSubsystem = new TurntableSubsystem(m_hardwareMap, m_telemetry, 1.0);
 //        m_AlignmentSubsystem = new AlignmentSubsystem(m_hardwareMap, m_telemetry);
 
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
@@ -163,8 +163,8 @@ public class PowerPlayBot extends Robot {
                         )
                 );
         m_turntableTrigger.whileActiveOnce(
-                new InstantCommand(()-> {m_turntableSubsystem.faceBackwards();})).whenInactive(
-                        new InstantCommand(()-> {m_turntableSubsystem.faceForward();}));
+                new InstantCommand(()-> {m_turntableSubsystem.faceForward();})).whenInactive(
+                        new InstantCommand(()-> {m_turntableSubsystem.faceBackwards();}));
 //        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
 //                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
 
@@ -178,6 +178,9 @@ public class PowerPlayBot extends Robot {
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.Y)
                         .whenPressed(new InstantCommand(() -> {m_clawIntakeSubsystem.actuate();}));
+
+        m_gamePad1.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.actuate();}));
 
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 //                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceForward();}));

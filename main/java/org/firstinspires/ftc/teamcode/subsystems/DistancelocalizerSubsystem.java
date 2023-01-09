@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
+
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -18,10 +21,13 @@ public class DistancelocalizerSubsystem extends SubsystemBase{
     DistanceSensor m_distanceSensorForwardB;
     DistanceSensor m_distanceSensorLeft;
     DistanceSensor m_distanceSensorRight;
+
     Pose2d pose;
     double XOffset = 5;
     double YOffset = 5;
-
+    double a;
+    double b;
+    double c;
 
 
     public DistancelocalizerSubsystem(HardwareMap hardwareMap, Telemetry telemetry){
@@ -33,10 +39,17 @@ public class DistancelocalizerSubsystem extends SubsystemBase{
 //        m_distanceSensorRight = hardwareMap.get(DistanceSensor.class, "");
 
     }
-    public Pose2d RelocalizeQuadrantOne(){
-        return new Pose2d((m_distanceSensorForwardA.getDistance(DistanceUnit.INCH)) + XOffset,
-                m_distanceSensorRight.getDistance(DistanceUnit.INCH)+ YOffset);
-    }
+//    public Pose2d RelocalizeQuadrantOne(double desiredHeading, double heading){
+//        b = 180 - (90 + Math.toDegrees(desiredHeading)- Math.toDegrees(heading));
+//        a = 180 - (90 + Math.toDegrees(desiredHeading + 90)- Math.toDegrees(heading));
+//        return new Pose2d(
+//                (Math.sin(b)* m_distanceSensorForwardA.getDistance(DistanceUnit.INCH))/Math.sin(90),
+//                )
+//
+//        return new Pose2d(72 - (m_distanceSensorForwardA.getDistance(DistanceUnit.INCH)) + XOffset,
+//                72 - (m_distanceSensorRight.getDistance(DistanceUnit.INCH)+ YOffset));
+//
+//    }
     public Pose2d RelocalizeQuadrantTwo(){
         return new Pose2d(m_distanceSensorForwardB.getDistance(DistanceUnit.INCH)+ XOffset,
                 m_distanceSensorRight.getDistance(DistanceUnit.INCH)+ YOffset);
