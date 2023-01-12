@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.Robot;
@@ -186,15 +187,48 @@ public class PowerPlayBot extends Robot {
 //                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceForward();}));
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
 //                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceBackwards();}));
-
+        
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);}));
+                .whenPressed(new SequentialCommandGroup(
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.JUNCTIONLEVEL);}),
+                                new ConditionalCommand(
+                                        new WaitCommand(0),
+                                        new SequentialCommandGroup(
+                                                new WaitCommand(500),
+                                                new InstantCommand(m_turntableSubsystem::faceForward, m_turntableSubsystem)
+                                        ),
+                                        () -> m_turntableSubsystem.getTurntablePosition() == 0.0
+                                )
+                            )
+                );
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.STACKLEVEL);}));
+                .whenPressed(new SequentialCommandGroup(
+                                new ConditionalCommand(
+                                        new SequentialCommandGroup(
+                                                new InstantCommand(m_turntableSubsystem::faceBackwards, m_turntableSubsystem),
+                                                new WaitCommand(500)
+                                                ),
+                                        new WaitCommand(0),
+                                        () -> m_turntableSubsystem.getTurntablePosition() == 0.0
+                                ),
+                        new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.STACKLEVEL);})
+                        )
+                );
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}));
+                .whenPressed(new SequentialCommandGroup(
+                                new ConditionalCommand(
+                                        new SequentialCommandGroup(
+                                                new InstantCommand(m_turntableSubsystem::faceBackwards, m_turntableSubsystem),
+                                                new WaitCommand(500)
+                                        ),
+                                        new WaitCommand(0),
+                                        () -> m_turntableSubsystem.getTurntablePosition() == 0.0
+                                ),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);})
+                        )
+                );
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenPressed(new SequentialCommandGroup(
