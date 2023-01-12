@@ -26,11 +26,11 @@ public class TurntableSubsystem extends SubsystemBase {
     }
 
 
-    public void faceForward() {
+    public void depositPosition() {
         m_position = 0.0;
     }
 
-    public void faceBackwards() {
+    public void intakePosition() {
         m_position = 1.0;
     }
 

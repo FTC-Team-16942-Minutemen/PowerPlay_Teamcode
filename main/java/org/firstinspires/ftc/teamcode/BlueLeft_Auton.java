@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robots.Constants;
 import org.firstinspires.ftc.teamcode.robots.PowerPlayBot;
+import org.firstinspires.ftc.teamcode.subsystems.DistancelocalizerSubsystem;
 
 /*
 Autonomous OpMode script using Command-based Robot
@@ -53,7 +54,8 @@ public class BlueLeft_Auton extends LinearOpMode {
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
        // Pose2d initialPose = new Pose2d(new Vector2d( 40.5, 65.0), Math.toRadians(-90.0));
 //        Pose2d initialPose = new Pose2d(new Vector2d( 36, 65.0), Math.toRadians(180.0));
-        Pose2d initialPose = new Pose2d(new Vector2d( 41, 63), Math.toRadians(180.0));
+        Pose2d initialPose = new Pose2d(new Vector2d( 36, 55.0), Math.toRadians(90.0));
+       // Pose2d initialPose = new Pose2d(DistancelocalizerSubsystem.class.);
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(
                 Constants.OpModeType.BLUE_LEFT_AUTO,

@@ -23,9 +23,9 @@ public class TurntableTurnCommand extends CommandBase{
     @Override
     public void execute(){
         if(m_turntableSubsystem.getTurntablePosition() > 0.0){
-            m_turntableSubsystem.faceForward();
+            m_turntableSubsystem.intakePosition();
         } else {
-            m_turntableSubsystem.faceBackwards();
+            m_turntableSubsystem.depositPosition();
         }
     }
 }
