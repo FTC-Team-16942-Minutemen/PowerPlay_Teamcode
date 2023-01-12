@@ -163,9 +163,7 @@ public class PowerPlayBot extends Robot {
                             new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
                         )
                 );
-        m_turntableTrigger.whileActiveOnce(
-                new InstantCommand(()-> {m_turntableSubsystem.faceForward();})).whenInactive(
-                        new InstantCommand(()-> {m_turntableSubsystem.faceBackwards();}));
+
 //        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
 //                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
 
