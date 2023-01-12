@@ -197,7 +197,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new WaitCommand(0),
                                         new SequentialCommandGroup(
-                                                new WaitCommand(500),
+                                                new WaitCommand(700),
                                                 new InstantCommand(m_turntableSubsystem::depositPosition, m_turntableSubsystem)
                                         ),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
@@ -210,7 +210,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
                                                 new InstantCommand(m_turntableSubsystem::intakePosition, m_turntableSubsystem),
-                                                new WaitCommand(500)
+                                                new WaitCommand(700)
                                         ),
                                         new WaitCommand(0),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
@@ -224,7 +224,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
                                                 new InstantCommand(m_turntableSubsystem::intakePosition, m_turntableSubsystem),
-                                                new WaitCommand(500)
+                                                new WaitCommand(700)
                                         ),
                                         new WaitCommand(0),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
