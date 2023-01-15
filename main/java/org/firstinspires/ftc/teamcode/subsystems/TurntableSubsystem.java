@@ -14,8 +14,8 @@ public class TurntableSubsystem extends SubsystemBase {
     double m_position;
 
 
-    public static double minScale = 0.04;
-    public static double maxScale = 0.7;
+    public static double minScale = 0.3;
+    public static double maxScale = 0.975;
 
 
     public TurntableSubsystem(HardwareMap hardwareMap, Telemetry telemetry, double initial_position) {

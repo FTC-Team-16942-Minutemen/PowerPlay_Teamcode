@@ -197,7 +197,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new WaitCommand(0),
                                         new SequentialCommandGroup(
-                                                new WaitCommand(700),
+                                                new WaitCommand(550),
                                                 new InstantCommand(m_turntableSubsystem::depositPosition, m_turntableSubsystem)
                                         ),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
@@ -210,7 +210,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
                                                 new InstantCommand(m_turntableSubsystem::intakePosition, m_turntableSubsystem),
-                                                new WaitCommand(700)
+                                                new WaitCommand(550)
                                         ),
                                         new WaitCommand(0),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
@@ -224,7 +224,7 @@ public class PowerPlayBot extends Robot {
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
                                                 new InstantCommand(m_turntableSubsystem::intakePosition, m_turntableSubsystem),
-                                                new WaitCommand(700)
+                                                new WaitCommand(550)
                                         ),
                                         new WaitCommand(0),
                                         () -> m_turntableSubsystem.getTurntablePosition() == 0.0
@@ -364,16 +364,16 @@ public class PowerPlayBot extends Robot {
                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                         //new WaitCommand(300),
                         new ParallelCommandGroup(
-                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/FirstPole", 30, 25),
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/FirstPole", 35, 30),
                                 new SequentialCommandGroup(
                                         new WaitCommand(500),
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
                                         new InstantCommand(() -> {m_turntableSubsystem.depositPosition();})
                                         )
                         ),
-                        new WaitCommand(400),
+                        new WaitCommand(200),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                        new WaitCommand(100),
+                        new WaitCommand(200),
                         new ParallelCommandGroup(
                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
                                 new SequentialCommandGroup(
@@ -386,7 +386,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(200),
                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                         new ParallelCommandGroup(
-                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 30, 15),
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
                                         new WaitCommand(400),
@@ -395,7 +395,7 @@ public class PowerPlayBot extends Robot {
                         ),
                                 new WaitCommand(30),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                                 new WaitCommand(110),
+                                 new WaitCommand(200),
 
                         new ParallelCommandGroup(
                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
@@ -409,7 +409,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(200),
                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                         new ParallelCommandGroup(
-                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 30, 15),
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
                                         new WaitCommand(400),
@@ -418,7 +418,7 @@ public class PowerPlayBot extends Robot {
                         ),
                         new WaitCommand(30),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                        new WaitCommand(110),
+                        new WaitCommand(200),
 
                         new ParallelCommandGroup(
                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
@@ -432,7 +432,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(200),
                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                         new ParallelCommandGroup(
-                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 30, 15),
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
                                         new WaitCommand(400),
@@ -441,7 +441,44 @@ public class PowerPlayBot extends Robot {
                         ),
                         new WaitCommand(30),
                         new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                        new WaitCommand(110),
+                        new WaitCommand(200),
+                        new ParallelCommandGroup(
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> {m_turntableSubsystem.intakePosition();}),
+                                        new WaitCommand(400),
+                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 0);})
+                                )
+                        ),
+                        new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+                        new WaitCommand(200),
+                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
+                        new ParallelCommandGroup(
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
+                                        new WaitCommand(400),
+                                        new InstantCommand(() -> {m_turntableSubsystem.depositPosition();})
+                                )
+                        ),
+                        new WaitCommand(30),
+                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
+                        new WaitCommand(200),
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> {m_turntableSubsystem.intakePosition();}),
+                                new WaitCommand(400),
+                                new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 0);})
+                        ),
+                        new ParallelCommandGroup(
+                                new ParkingCommand(m_driveTrain, m_visionSubsystem,
+                                        "LeftAuton/ConeGetter" ,
+                                        "LeftAuton/BlueLeftPark1",
+                                        "LeftAuton/BlueLeftPark2"
+                                )
+
+                        )));}
+                        /*
+
 
                         new ParallelCommandGroup(
                                 new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
@@ -455,7 +492,7 @@ public class PowerPlayBot extends Robot {
                         new WaitCommand(200),
                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                         new ParallelCommandGroup(
-                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 30, 15),
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
                                         new WaitCommand(400),
@@ -464,21 +501,28 @@ public class PowerPlayBot extends Robot {
                         ),
                              new WaitCommand(30),
                                new InstantCommand(() -> {m_clawIntakeSubsystem.open();}),
-                               new WaitCommand(110)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            new WaitCommand(200),
+                        new ParallelCommandGroup(
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/ConeGetter", 35, 30),
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> {m_turntableSubsystem.intakePosition();}),
+                                        new WaitCommand(400),
+                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.GROUNDLEVEL, 0);})
+                                )
+                        ),
+                        new InstantCommand(() -> {m_clawIntakeSubsystem.close();}),
+                        new WaitCommand(200),
+                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
+                        new ParallelCommandGroup(
+                                new TrajectoryFollowerCommand(m_driveTrain, "LeftAuton/Cycler", 35, 30),
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
+                                        new WaitCommand(400),
+                                        new InstantCommand(() -> {m_turntableSubsystem.depositPosition();})
+                                )
+                        ),
+                        new WaitCommand(30),
+                        new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
 
         ));
 //               new SequentialCommandGroup(
@@ -758,7 +802,7 @@ public class PowerPlayBot extends Robot {
 
 //                )
 //        );
-
+/*/
     private void setupRedRight_Auton()
     {
 //
