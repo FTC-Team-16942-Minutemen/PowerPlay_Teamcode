@@ -902,7 +902,7 @@ public class PowerPlayBot extends Robot {
                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 1);}),
                                 //new WaitCommand(300),
                                 new ParallelCommandGroup(
-                                        new TrajectoryFollowerCommand(m_driveTrain, "RedRight/SideFirstPole", 35, 30),
+                                        new TrajectoryFollowerCommand(m_driveTrain, "RedRight/SideFirstPole", 35, 35),
                                         new SequentialCommandGroup(
                                                 new WaitCommand(500),
                                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.JUNCTIONLEVEL, 2);}),
