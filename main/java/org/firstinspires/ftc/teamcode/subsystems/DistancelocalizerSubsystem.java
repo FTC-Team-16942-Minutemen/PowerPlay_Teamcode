@@ -28,6 +28,7 @@ public class DistancelocalizerSubsystem extends SubsystemBase{
     double a;
     double b;
     double c;
+    double stackWallPose = 65.5;
 
 
 //    public DistancelocalizerSubsystem(HardwareMap hardwareMap, Telemetry telemetry){
@@ -55,7 +56,7 @@ public class DistancelocalizerSubsystem extends SubsystemBase{
 //                m_distanceSensorRight.getDistance(DistanceUnit.INCH)+ YOffset);
 //    }
     public Pose2d RelocalizeQuadrantThree(){
-        return new Pose2d(m_distanceSensorRight.getDistance(DistanceUnit.INCH)+ XOffset,
+        return new Pose2d(stackWallPose,
                 m_distanceSensorForwardA.getDistance(DistanceUnit.INCH)+ YOffset);
     }
 //    public Pose2d RelocalizeQuadrantFour(){

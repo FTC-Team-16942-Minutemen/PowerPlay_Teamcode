@@ -18,6 +18,7 @@ public class VisionSubsystem extends SubsystemBase {
     Telemetry m_telemetry;
     OpenCvWebcam m_webcam;
     AprilTagSleeveDetectionPipeline m_imagePipeline;
+//    Boolean m_showStage = Boolean.TRUE;
 
     public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry)
     {
@@ -51,13 +52,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        m_telemetry.addData("stageToShow:", m_imagePipeline.getStageToShow());
-//        m_telemetry.update();
+//        if(m_showStage) {
+//            m_telemetry.addData("Detected Spot:", m_imagePipeline.getParkingSpot());
+//            m_telemetry.update();
+//        }
     }
 
     public void disablePipeline()
     {
         m_webcam.stopStreaming();
+//        m_showStage = Boolean.FALSE;
     }
 
     public int getParkingSpot(){
