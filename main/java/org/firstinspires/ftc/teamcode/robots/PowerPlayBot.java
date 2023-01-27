@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.AlignmentCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoTargetingDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ParkingCommand;
 import org.firstinspires.ftc.teamcode.commands.ScoringCommand;
@@ -155,14 +156,14 @@ public class PowerPlayBot extends Robot {
 
     private void setupTeleOp()
     {
-        m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
-                m_linearSlideSubsystem,
-                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
-                .whenInactive(new SequentialCommandGroup(
-                            new WaitCommand(100),
-                            new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
-                        )
-                );
+//        m_leftTriggerTrigger.whileActiveOnce(new ScoringCommand(m_clawIntakeSubsystem,
+//                m_linearSlideSubsystem,
+//                ()->m_gamePad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
+//                .whenInactive(new SequentialCommandGroup(
+//                            new WaitCommand(100),
+//                            new InstantCommand(() -> {m_linearSlideSubsystem.setElevatorPower(1.0);})
+//                        )
+//                );
 //        m_leftTriggerTrigger.whileActiveOnce(new InstantCommand())
 //        m_turntableTrigger.whileActiveOnce(
 //                new SequentialCommandGroup(
@@ -170,8 +171,12 @@ public class PowerPlayBot extends Robot {
 //                        new InstantCommand(()-> {m_turntableSubsystem.depositPosition();}))
 //                        ).whenInactive(
 //                        new InstantCommand(()-> {m_turntableSubsystem.intakePosition();}));
-//        m_leftTriggerTrigger.whileActiveOnce(new TurntableTurnCommand(m_turntableSubsystem,
-//                ()->m_gamePad1.getButton(GamepadKeys.Button.B)));
+        m_leftTriggerTrigger.whileActiveContinuous(new AutoTargetingDriveCommand(m_driveTrain,
+                m_visionSubsystem,
+                ()->m_gamePad1.getLeftY(),
+                ()->-m_gamePad1.getLeftX(),
+                ()->-m_gamePad1.getRightX(),
+                false));
 
 
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
@@ -595,7 +600,8 @@ public class PowerPlayBot extends Robot {
                                         "LeftAuton/BlueLeftPark2"
                                 )
 
-                        )));}
+                      )
+        ));}
                         /*
 
 
@@ -1039,14 +1045,15 @@ public class PowerPlayBot extends Robot {
                                         new InstantCommand(() -> {m_turntableSubsystem.intakePosition();}),
                                         new WaitCommand(400),
                                         new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 0);})
-                                ),
-                                new ParallelCommandGroup(
-                                        new ParkingCommand(m_driveTrain, m_visionSubsystem,
-                                                "RedRight/ConeGetter" ,
-                                                "RedRight/RedRightParking1",
-                                                "RedRight/RedRightParking2"
-                                        )
-
+//                                ),
+//                                new ParallelCommandGroup(
+//                                        new ParkingCommand(m_driveTrain, m_visionSubsystem,
+//                                                "RedRight/ConeGetter" ,
+//                                                "RedRight/RedRightParking1",
+//                                                "RedRight/RedRightParking2"
+//                                        )
+//
+//                                )
                                 )));}
 
 
@@ -1081,12 +1088,12 @@ public class PowerPlayBot extends Robot {
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> {m_linearSlideSubsystem.stateTransition(Constants.LinearSlideState.GROUNDLEVEL);}),
                                 new InstantCommand(() -> {m_clawIntakeSubsystem.open();})
-                        ),
-                        new ParkingCommand(m_driveTrain,m_visionSubsystem ,
-                                "RedLeft/RedLeftParking0",
-                                "RedLeft/RedLeftParking1",
-                                "RedLeft/RedLeftParking2"
                         )
+//                        new ParkingCommand(m_driveTrain,m_visionSubsystem ,
+//                                "RedLeft/RedLeftParking0",
+//                                "RedLeft/RedLeftParking1",
+//                                "RedLeft/RedLeftParking2"
+//                        )
                 )
         );
     }
