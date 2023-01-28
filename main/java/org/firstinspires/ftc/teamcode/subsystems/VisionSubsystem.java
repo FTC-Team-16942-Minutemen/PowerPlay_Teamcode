@@ -27,7 +27,7 @@ public class VisionSubsystem extends SubsystemBase {
         m_hardwareMap = hardwareMap;
         m_telemetry = telemetry;
         m_imagePipeline = new AprilTagSleeveDetectionPipeline();
-//        m_imagePipeline = new SleeveDetectionPipeline();
+ //       m_imagePipeline = new SleeveDetectionPipeline();
 //        m_imagePipeline = new AprilTagSleeveDetectionPipeline();
 
 

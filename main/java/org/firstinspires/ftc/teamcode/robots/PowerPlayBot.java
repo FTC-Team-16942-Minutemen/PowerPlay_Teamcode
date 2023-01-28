@@ -31,6 +31,7 @@ import org.firstinspires.ftc.teamcode.robots.triggers.LeftTriggerTrigger;
 import org.firstinspires.ftc.teamcode.robots.triggers.TurntableTrigger;
 import org.firstinspires.ftc.teamcode.subsystems.ClawIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.AlignmentSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DistancelocalizerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurntableSubsystem;
@@ -56,6 +57,7 @@ public class PowerPlayBot extends Robot {
     TurntableSubsystem m_turntableSubsystem;
     TurntableTrigger m_turntableTrigger;
     Command m_command;
+    //DistancelocalizerSubsystem m_distancelocalizerSubsystem;
 //    DistanceTrigger m_distanceTrigger;
 //    TimedTrigger m_timedParkingTrigger;
     LeftTriggerTrigger m_leftTriggerTrigger;
@@ -86,6 +88,7 @@ public class PowerPlayBot extends Robot {
         m_clawIntakeSubsystem = new ClawIntakeSubsystem(m_hardwareMap, m_telemetry, 1.0);
         m_turntableSubsystem = new TurntableSubsystem(m_hardwareMap, m_telemetry, 1.0);
 //        m_AlignmentSubsystem = new AlignmentSubsystem(m_hardwareMap, m_telemetry);
+        //m_distancelocalizerSubsystem = new DistancelocalizerSubsystem(m_hardwareMap, m_telemetry);
 
         //Setup the Robot Commands/Subsystem mappings based on OpMode type
 //        m_command = new TrajectoryFollowerCommand(m_driveTrain, "TestPath");//was TestPath
@@ -179,6 +182,9 @@ public class PowerPlayBot extends Robot {
                 false));
 
 
+
+
+
         m_driveTrain.setDefaultCommand(new DriveCommand(m_driveTrain,
                 ()->m_gamePad1.getLeftY(),
                 ()->-m_gamePad1.getLeftX(),
@@ -194,8 +200,8 @@ public class PowerPlayBot extends Robot {
 
 //        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 //                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.faceForward();}));
-//        m_gamePad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-//                .whenPressed(new InstantCommand(() -> {m_turntableSubsystem.();}));
+//        m_gamePad1.getGamepadButton(GamepadKeys.Button.A)
+//                .whenPressed(new InstantCommand(() -> {m_driveTrain.setPoseEstimate(m_distancelocalizerSubsystem.RelocalizeWestWall());}));
 
         m_gamePad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new SequentialCommandGroup(
@@ -593,14 +599,11 @@ public class PowerPlayBot extends Robot {
                                 new WaitCommand(250),
                                 new InstantCommand(() -> {m_linearSlideSubsystem.setState(Constants.LinearSlideState.STACKLEVEL, 0);})
                         ),
-                        new ParallelCommandGroup(
                                 new ParkingCommand(m_driveTrain, m_visionSubsystem,
                                         "LeftAuton/ConeGetter" ,
                                         "LeftAuton/BlueLeftPark1",
                                         "LeftAuton/BlueLeftPark2"
                                 )
-
-                      )
         ));}
                         /*
 

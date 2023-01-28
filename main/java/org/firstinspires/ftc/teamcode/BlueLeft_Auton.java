@@ -54,7 +54,7 @@ public class BlueLeft_Auton extends LinearOpMode {
 //        Pose2d initialPose = new Pose2d(new Vector2d( 35.0, 60.0), -90.0);
        // Pose2d initialPose = new Pose2d(new Vector2d( 40.5, 65.0), Math.toRadians(-90.0));
 //        Pose2d initialPose = new Pose2d(new Vector2d( 36, 65.0), Math.toRadians(180.0));
-        Pose2d initialPose = new Pose2d(new Vector2d(32.5 , 64.6), Math.toRadians(90.0));
+        Pose2d initialPose = new Pose2d(new Vector2d(32.5 , 64.8), Math.toRadians(90.0));
        // Pose2d initialPose = new Pose2d(DistancelocalizerSubsystem.class.);
         //Instantiate the robot
         PowerPlayBot m_robot = new PowerPlayBot(

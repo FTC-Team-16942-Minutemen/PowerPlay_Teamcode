@@ -43,7 +43,7 @@ public class LinearSlideSubsystem extends SubsystemBase {
     public static double downElevatorPower = 1.0;
     public static double upElevatorPower = 1.0;
 
-    public static int junctionHigh = 2795; //was 3150
+    public static int junctionHigh = 2700; //was 3150
     public static int junctionMed = 2034;
     public static int junctionLow = 1200;
     public static int junctionGnd = 300;

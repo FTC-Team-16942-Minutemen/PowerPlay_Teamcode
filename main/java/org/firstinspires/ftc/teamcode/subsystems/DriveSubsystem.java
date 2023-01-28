@@ -191,9 +191,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        m_telemetry.addData("robotPosePoseEstimate", getPoseEstimate());
-//        m_telemetry.update();
+        m_telemetry.addData("robotPosePoseEstimate", getPoseEstimate());
+        m_telemetry.update();
         m_drive.updatePoseEstimate();
+
     //    update();
 //        IMUCorrectedHeading();
 //        m_telemetry.addData("Real Heading", m_drive.getRawExternalHeading());
